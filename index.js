@@ -1,13 +1,15 @@
 
-
 import { GoogleGenAI } from "@google/genai";
 
 // --- Data for the portfolio ---
 
 const portfolioItems = [
-    { title: 'Project One', category: 'UI/UX Design', imgSrc: 'images/1.png', size: 'wide' },
-    { title: 'Project Two', category: 'Branding', imgSrc: 'images/2.png', size: 'normal' },
-    { title: 'Project Three', category: 'Web Development', imgSrc: 'images/3.png', size: 'normal' }
+    { title: 'Project One', category: 'UI/UX Design', imgSrc: 'images/project-1.jpg', size: 'wide' },
+    { title: 'Project Two', category: 'Branding', imgSrc: 'images/project-2.jpg', size: 'normal' },
+    { title: 'Project Three', category: 'Web Development', imgSrc: 'images/project-3.jpg', size: 'normal' },
+    { title: 'Project Four', category: 'Illustration', imgSrc: 'images/project-4.jpg', size: 'normal' },
+    { title: 'Project Five', category: 'Motion Graphics', imgSrc: 'images/project-5.jpg', size: 'normal' },
+    { title: 'Project Six', category: 'Branding', imgSrc: 'images/project-6.jpg', size: 'wide' }
 ];
 
 const testimonials = [
