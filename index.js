@@ -1,23 +1,32 @@
+
+import { GoogleGenAI } from "@google/genai";
+
 // --- Data for the portfolio ---
 
-// Updated portfolio data with a 'size' property for a dynamic grid layout.
 const portfolioItems = [
-    { title: 'Project One', category: 'UI/UX Design', imgSrc: 'https://placehold.co/800x450/1e1e1e/ffffff?text=Project+1', size: 'wide' },
-    { title: 'Project Two', category: 'Branding', imgSrc: 'https://placehold.co/400x500/1e1e1e/ffffff?text=Project+2', size: 'normal' },
-    { title: 'Project Three', category: 'Web Development', imgSrc: 'https://placehold.co/400x500/1e1e1e/ffffff?text=Project+3', size: 'normal' },
-    { title: 'Project Four', category: 'Illustration', imgSrc: 'https://placehold.co/800x450/1e1e1e/ffffff?text=Project+4', size: 'wide' },
-    { title: 'Project Five', category: 'Motion Graphics', imgSrc: 'https://placehold.co/400x500/1e1e1e/ffffff?text=Project+5', size: 'normal' },
-    { title: 'Project Six', category: 'Art Direction', imgSrc: 'https://placehold.co/400x500/1e1e1e/ffffff?text=Project+6', size: 'normal' }
+    { title: 'Project One', category: 'UI/UX Design', imgSrc: './images/1.png', size: 'wide' },
+    { title: 'Project Two', category: 'Branding', imgSrc: './images/2.png', size: 'normal' },
+    { title: 'Project Three', category: 'Web Development', imgSrc: './images/3.png', size: 'normal' }
 ];
 
+const testimonials = [
+    { quote: "Working with MEDAR STUDIO was an absolute pleasure. Their creativity and attention to detail transformed our vision into a stunning reality. Highly recommended!", author: "Jane Doe", company: "Creative Minds Inc." },
+    { quote: "The level of professionalism and the quality of the final product exceeded all our expectations. A truly talented designer who listens and delivers.", author: "John Smith", company: "Future Ventures" },
+    { quote: "Incredible design sense and a collaborative spirit. They took our brand to the next level. We couldn't be happier with the results.", author: "Emily White", company: "Innovate Co." }
+];
 
-// Placeholder links for social media. Replace '#' with your actual URLs.
 const socialLinks = [
     { name: 'Instagram', url: 'https://www.instagram.com/med_amine_amarir', icon: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4m0 4a4 4 0 0 1 4 -4h8a4 4 0 0 1 4 4v8a4 4 0 0 1 -4 4h-8a4 4 0 0 1 -4 -4z" /><path d="M12 12m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0" /><path d="M16.5 7.5l0 .01" /></svg>' },
     { name: 'TikTok', url: 'https://www.tiktok.com/@mohamedamineamarir', icon: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 7.917v4.034a9.948 9.948 0 0 1 -5 -1.951v4.5a6.5 6.5 0 1 1 -8 -6.326v4.326a2.5 2.5 0 1 0 4 2v-11.5h4.083a6.005 6.005 0 0 0 4.917 4.917z" /></svg>' },
-    { name: 'X', url: 'https://x.com/MohamedAmi39880', icon: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4l11.733 16h4.267l-11.733 -16h-4.267zM4 20l6.768 -6.768m2.46 -2.46l6.772 -6.772"/></svg>' },
+    { name: 'X', url: 'https://x.com/MohamedAmi39880', icon: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4l11.733 16h4.267l-11.733 -16h-4.267z" /><path d="M4 20l6.768 -6.768m2.46 -2.46l6.772 -6.772"/></svg>' },
     { name: 'WhatsApp', url: 'https://wa.me/message/EKPSYN2OA7CSA1', icon: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21l1.65 -3.8a9 9 0 1 1 3.4 2.9l-5.05 .9" /><path d="M9 10a.5 .5 0 0 0 1 0v-1a.5 .5 0 0 0 -1 0v1a5 5 0 0 0 5 5h1a.5 .5 0 0 0 0 -1h-1a.5 .5 0 0 0 0 1" /></svg>' },
     { name: 'LinkedIn', url: 'https://www.linkedin.com/in/mohamed-amine-amarir-4b4682256', icon: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4m0 2a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2z" /><path d="M8 11l0 5" /><path d="M8 8l0 .01" /><path d="M12 16l0 -5" /><path d="M16 16v-3a2 2 0 0 0 -4 0" /></svg>' }
+];
+
+const quickQuestions = [
+    { question: "What services do you offer?", answer: "MEDAR STUDIO offers a range of creative services including UI/UX Design, Branding, Web Development, Illustration, and Motion Graphics. Do you have a specific project in mind?" },
+    { question: "Tell me more about you.", answer: "I'm the creative force behind MEDAR STUDIO. I'm a passionate designer and visual artist dedicated to crafting unique and impactful digital experiences. You can learn more in the 'About Me' section!" },
+    { question: "How can I start a project?", answer: "It's simple! Just head over to the 'Contact' section, fill out the form with some details about your project, and I'll get back to you as soon as possible to discuss the next steps." },
 ];
 
 // --- Core Application Logic ---
@@ -27,8 +36,9 @@ const socialLinks = [
  */
 function renderApp() {
     const appContainer = document.getElementById('root');
-    if (!appContainer) return;
-
+    const aiContainer = document.getElementById('ai-assistant-container');
+    if (!appContainer || !aiContainer) return;
+    
     appContainer.innerHTML = `
         <header class="header">
             <div class="container">
@@ -37,6 +47,7 @@ function renderApp() {
                     <ul>
                         <li><a href="#home">Home</a></li>
                         <li><a href="#work">Work</a></li>
+                        <li><a href="#about">About</a></li>
                         <li><a href="#contact" class="nav-cta">Let's Connect</a></li>
                     </ul>
                 </nav>
@@ -63,7 +74,7 @@ function renderApp() {
                     <h2>My Work</h2>
                     <div class="portfolio-grid">
                         ${portfolioItems.map(item => `
-                            <div class="portfolio-item portfolio-item--${item.size || 'normal'}" data-img-src="${item.imgSrc}">
+                            <div class="portfolio-item portfolio-item--${item.size || 'normal'}" data-category="${item.category}" data-img-src="${item.imgSrc}">
                                 <div class="portfolio-item-inner">
                                     <img src="${item.imgSrc}" alt="${item.title}">
                                     <div class="portfolio-item-overlay">
@@ -77,19 +88,70 @@ function renderApp() {
                 </div>
             </section>
 
+            <section id="testimonials" class="testimonials">
+                <div class="container">
+                    <h2>What My Clients Say</h2>
+                    <div class="testimonial-slider-container">
+                        <div class="testimonial-slider">
+                            ${testimonials.map(t => `
+                                <div class="testimonial-slide">
+                                    <p class="testimonial-quote">"${t.quote}"</p>
+                                    <div class="testimonial-author">
+                                        <span class="author-name">${t.author}</span>
+                                        <span class="author-company">${t.company}</span>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                        <button class="slider-btn prev" aria-label="Previous testimonial">&lt;</button>
+                        <button class="slider-btn next" aria-label="Next testimonial">&gt;</button>
+                    </div>
+                </div>
+            </section>
+
+            <section id="about" class="about">
+                <div class="container about-container">
+                    <div class="about-content fade-in-up">
+                        <h2>About Our Studio</h2>
+                        <div class="about-summary">
+                            <p class="about-intro">Medar Studio is a creative space dedicated to bringing ideas to life through modern and meaningful visuals. Driven by curiosity and innovation, we design each project as a story to tell, seeking the perfect harmony between aesthetics and functionality.</p>
+                            <button class="read-more-btn">Read More</button>
+                        </div>
+                        <div class="about-full-text">
+                            <p>Our mission is to bring ideas to life through modern, balanced, and meaningful visuals. Each project is crafted with passion, thought, and careful attention to detail.</p>
+                            <p>Born from a simple vision — to create, learn, and grow — Medar Studio is driven by curiosity, creativity, and innovation to imagine unique concepts. We believe that design goes beyond appearance: it is a way to communicate, to evoke emotion, and to reveal identity.</p>
+                            <p>Every creation we produce reflects a pursuit of harmony between aesthetics and functionality, simplicity and impact. At Medar Studio, we see each project as an opportunity to tell a story, express an idea, and build a memorable visual experience.</p>
+                            <blockquote class="about-quote">
+                               <p>Medar Studio is more than just a creative studio — it’s a vision, a style, and a passion for everything related to the world of design and digital art.</p>
+                            </blockquote>
+                        </div>
+                        <a href="#contact" class="cta-button get-in-touch-btn">Get In Touch</a>
+                    </div>
+                </div>
+            </section>
+            
             <section id="contact" class="contact">
                 <div class="container contact-container">
                     <div class="contact-info">
                          <h2>Get In Touch</h2>
                          <p>Have a project in mind or just want to say hello? I'd love to hear from you. Fill out the form, and I'll get back to you as soon as possible.</p>
                     </div>
-                    <form action="https://formspree.io/f/YOUR_UNIQUE_ID" method="POST" class="contact-form">
+                    <form action="https://formspree.io/f/YOUR_UNIQUE_ID" method="POST" class="contact-form" novalidate>
                         <div class="form-row">
-                            <input type="text" name="name" placeholder="Your Name" required>
-                            <input type="email" name="email" placeholder="Your Email" required>
+                             <div class="form-group">
+                                <input type="text" id="name" name="name" placeholder="Your Name" required>
+                                <span class="error-message"></span>
+                            </div>
+                             <div class="form-group">
+                                <input type="email" id="email" name="email" placeholder="Your Email" required>
+                                <span class="error-message"></span>
+                            </div>
                         </div>
-                        <textarea name="message" placeholder="Your Message" rows="5" required></textarea>
-                        <button type="submit">Send Message</button>
+                        <div class="form-group">
+                            <textarea name="message" id="message" placeholder="Your Message" rows="5" required></textarea>
+                            <span class="error-message"></span>
+                        </div>
+                        <button type="submit" disabled>Send Message</button>
                     </form>
                 </div>
             </section>
@@ -112,13 +174,44 @@ function renderApp() {
         </div>
     `;
 
-    // After the HTML is in the DOM, set up the interactive animations.
+    aiContainer.innerHTML = `
+        <div class="ai-chat-widget">
+            <button class="chat-fab" aria-label="Open AI Assistant">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8V4H8" /><path d="M8.5 12.5a5 5 0 1 0 -5 0V12a3 3 0 0 0 3 3h1" /><path d="M18 18.5a5 5 0 1 0 0 -10v1.5" /><path d="M12.5 18H14a3 3 0 0 0 3 -3v-.5" /><path d="M16 12h-4" /></svg>
+            </button>
+            <div class="chat-window" role="dialog" aria-modal="true" aria-labelledby="chat-heading" hidden>
+                <div class="chat-header">
+                    <h3 id="chat-heading">AI Assistant</h3>
+                    <button class="chat-close" aria-label="Close chat">&times;</button>
+                </div>
+                <div class="chat-body">
+                    <div class="chat-messages"></div>
+                </div>
+                <div class="chat-footer">
+                    <div class="quick-questions">
+                         ${quickQuestions.map(q => `<button class="quick-question-btn">${q.question}</button>`).join('')}
+                    </div>
+                    <form class="chat-form">
+                        <input type="text" placeholder="Ask me anything..." required />
+                        <button type="submit" aria-label="Send message">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 14l11 -11" /><path d="M21 3l-6.5 18a.55 .55 0 0 1 -1 0l-3.5 -7l-7 -3.5a.55 .55 0 0 1 0 -1l18 -6.5" /></svg>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    `;
+
     setupHeaderScrollEffect();
     setupSmoothScrolling();
     setupScrollAnimations();
     setup3DTiltEffects();
     setupMobileNav();
     setupImageLightbox();
+    setupTestimonialsSlider();
+    setupAboutToggle();
+    setupAIAssistant();
+    setupContactFormValidation();
 }
 
 /**
@@ -161,39 +254,30 @@ function setupSmoothScrolling() {
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function (e) {
             e.preventDefault();
-
-            // Close mobile nav if it's open
             const header = document.querySelector('.header');
             if (header?.classList.contains('nav-open')) {
                 const navToggle = document.querySelector('.mobile-nav-toggle');
                 header.classList.remove('nav-open');
                 navToggle?.setAttribute('aria-expanded', 'false');
             }
-
             const targetId = this.getAttribute('href');
-
-            // Scroll to top for home/logo links
             if (!targetId || targetId === '#' || targetId === '#home') {
                 window.scrollTo({ top: 0, behavior: 'smooth' });
                 return;
             }
-            
             const targetElement = document.querySelector(targetId);
             if (targetElement) {
-                targetElement.scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'start'
-                });
+                targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
             }
         });
     });
 }
 
 /**
- * Sets up the fade-in-on-scroll animation for portfolio items.
+ * Sets up the fade-in-on-scroll animation for various elements.
  */
 function setupScrollAnimations() {
-    const items = document.querySelectorAll('.portfolio-item');
+    const items = document.querySelectorAll('.portfolio-item, .fade-in-up');
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
@@ -215,25 +299,19 @@ function setupScrollAnimations() {
  */
 function setup3DTiltEffects() {
     const portfolioItems = document.querySelectorAll('.portfolio-item');
-
     portfolioItems.forEach(item => {
         const inner = item.querySelector('.portfolio-item-inner');
         if (!inner) return;
-
         item.addEventListener('mousemove', (e) => {
             const rect = item.getBoundingClientRect();
             const x = e.clientX - rect.left;
             const y = e.clientY - rect.top;
-
             const centerX = rect.width / 2;
             const centerY = rect.height / 2;
-
-            const rotateX = ((y - centerY) / centerY) * -8; // Reduced max rotation
-            const rotateY = ((x - centerX) / centerX) * 8; // Reduced max rotation
-
+            const rotateX = ((y - centerY) / centerY) * -8;
+            const rotateY = ((x - centerX) / centerX) * 8;
             inner.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.05, 1.05, 1.05)`;
         });
-
         item.addEventListener('mouseleave', () => {
             inner.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale3d(1, 1, 1)';
         });
@@ -268,10 +346,240 @@ function setupImageLightbox() {
     };
 
     lightbox.addEventListener('click', (e) => {
-        // Close if the background or close button is clicked
         if (e.target === lightbox || e.target.classList.contains('lightbox-close')) {
             closeLightbox();
         }
+    });
+}
+
+/**
+ * Sets up the testimonial slider functionality.
+ */
+function setupTestimonialsSlider() {
+    const slider = document.querySelector('.testimonial-slider');
+    const prevBtn = document.querySelector('.slider-btn.prev');
+    const nextBtn = document.querySelector('.slider-btn.next');
+    if (!slider || !prevBtn || !nextBtn) return;
+
+    let currentIndex = 0;
+    const slides = slider.children;
+    const totalSlides = slides.length;
+
+    function updateSlider() {
+        slider.style.transform = `translateX(-${currentIndex * 100}%)`;
+    }
+
+    nextBtn.addEventListener('click', () => {
+        currentIndex = (currentIndex + 1) % totalSlides;
+        updateSlider();
+    });
+
+    prevBtn.addEventListener('click', () => {
+        currentIndex = (currentIndex - 1 + totalSlides) % totalSlides;
+        updateSlider();
+    });
+}
+
+/**
+ * Sets up the "Read More" functionality in the About section.
+ */
+function setupAboutToggle() {
+    const aboutContent = document.querySelector('.about-content');
+    if (!aboutContent) return;
+
+    const readMoreBtn = aboutContent.querySelector('.read-more-btn');
+    const fullTextContainer = aboutContent.querySelector('.about-full-text');
+
+    if (!readMoreBtn || !fullTextContainer) return;
+
+    readMoreBtn.addEventListener('click', () => {
+        // Add a class to trigger the transition
+        aboutContent.classList.add('is-expanded');
+        // Hide the button after click
+        readMoreBtn.style.display = 'none';
+    });
+}
+
+
+/**
+ * Sets up real-time validation for the contact form.
+ */
+function setupContactFormValidation() {
+    const form = document.querySelector('.contact-form');
+    if (!form) return;
+
+    const nameInput = form.querySelector('#name');
+    const emailInput = form.querySelector('#email');
+    const messageInput = form.querySelector('#message');
+    const submitBtn = form.querySelector('button[type="submit"]');
+
+    if (!nameInput || !emailInput || !messageInput || !submitBtn) return;
+    
+    const inputs = [nameInput, emailInput, messageInput];
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    const validationRules = {
+        name: (value) => value.trim() !== '',
+        email: (value) => emailRegex.test(value.trim()),
+        message: (value) => value.trim() !== '',
+    };
+
+    const errorMessages = {
+        name: 'Name cannot be empty.',
+        email: 'Please enter a valid email address.',
+        message: 'Message cannot be empty.',
+    };
+
+    function validateInput(input) {
+        const value = input.value;
+        const name = input.name;
+        const isValid = validationRules[name] ? validationRules[name](value) : true;
+        const formGroup = input.parentElement;
+        const errorEl = formGroup?.querySelector('.error-message');
+
+        if (isValid) {
+            formGroup?.classList.add('valid');
+            formGroup?.classList.remove('invalid');
+            if (errorEl) errorEl.textContent = '';
+        } else {
+            formGroup?.classList.add('invalid');
+            formGroup?.classList.remove('valid');
+            if (errorEl) errorEl.textContent = errorMessages[name];
+        }
+        return isValid;
+    }
+
+    inputs.forEach(input => {
+        input.addEventListener('input', () => {
+            // Validate the current input and then check the whole form's validity for the button state
+            validateInput(input);
+            const isFormValid = inputs.every(i => {
+                const name = i.name;
+                return validationRules[name](i.value);
+            });
+            submitBtn.disabled = !isFormValid;
+        });
+    });
+}
+
+
+/**
+ * Sets up the AI assistant functionality.
+ */
+function setupAIAssistant() {
+    const fab = document.querySelector('.chat-fab');
+    const chatWindow = document.querySelector('.chat-window');
+    const closeBtn = document.querySelector('.chat-close');
+    const chatForm = document.querySelector('.chat-form');
+    const input = chatForm.querySelector('input');
+    const messagesContainer = document.querySelector('.chat-messages');
+    const quickQuestionBtns = document.querySelectorAll('.quick-question-btn');
+
+    if (!fab || !chatWindow || !closeBtn || !chatForm || !input || !messagesContainer) return;
+
+    let chat;
+    try {
+        const ai = new GoogleGenAI({apiKey: process.env.API_KEY});
+        chat = ai.chats.create({
+            model: 'gemini-2.5-flash',
+            config: {
+                systemInstruction: "You are a friendly and professional AI assistant for MEDAR STUDIO, a creative design portfolio by Mohamed Amine Amarir. His skills include UI/UX Design, Branding, Web Development, Illustration, and Motion Graphics. Your goal is to helpfully answer visitor questions and encourage them to use the contact form for project inquiries. Keep answers concise and engaging.",
+            },
+        });
+    } catch (error) {
+        console.error("Failed to initialize Gemini AI:", error);
+        addMessage("Sorry, the AI assistant is currently unavailable.", 'ai');
+    }
+
+
+    const toggleChat = () => {
+        const isHidden = chatWindow.hidden;
+        chatWindow.hidden = !isHidden;
+        fab.setAttribute('aria-expanded', isHidden.toString());
+        if (isHidden) {
+            input.focus();
+            if (messagesContainer.children.length === 0) {
+                 addMessage("Hello! I'm the AI assistant for MEDAR STUDIO. How can I help you today?", 'ai');
+            }
+        }
+    };
+
+    fab.addEventListener('click', toggleChat);
+    closeBtn.addEventListener('click', toggleChat);
+
+    function addMessage(text, sender, isStreaming = false) {
+        const messageEl = document.createElement('div');
+        messageEl.classList.add('message', `${sender}-message`);
+        
+        if (isStreaming) {
+            messageEl.innerHTML = text; // Assumes markdown-it will be used or basic HTML
+        } else {
+            messageEl.textContent = text;
+        }
+
+        messagesContainer.appendChild(messageEl);
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        return messageEl;
+    }
+    
+    async function handleUserMessage(messageText) {
+        addMessage(messageText, 'user');
+
+        const responseEl = addMessage('...', 'ai');
+        responseEl.classList.add('thinking');
+
+        if (!chat) {
+            responseEl.textContent = "I can't connect to the AI service right now.";
+            responseEl.classList.remove('thinking');
+            return;
+        }
+
+        try {
+            const stream = await chat.sendMessageStream({ message: messageText });
+
+            let responseText = "";
+            let firstChunk = true;
+
+            for await (const chunk of stream) {
+                if (firstChunk) {
+                    responseText = "";
+                    responseEl.classList.remove('thinking');
+                    firstChunk = false;
+                }
+                responseText += chunk.text;
+                responseEl.textContent = responseText;
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            }
+
+            if (firstChunk) { // Handle case where stream is empty (e.g. safety block)
+                responseEl.textContent = "I'm not sure how to respond to that.";
+                responseEl.classList.remove('thinking');
+            }
+        } catch (error) {
+            console.error("Gemini API Error:", error);
+            responseEl.textContent = "Oops! Something went wrong while getting a response.";
+            responseEl.classList.remove('thinking');
+        }
+    }
+
+    chatForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const messageText = input.value.trim();
+        if (messageText) {
+            handleUserMessage(messageText);
+            input.value = '';
+        }
+    });
+
+    quickQuestionBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const question = btn.textContent;
+            const predefined = quickQuestions.find(q => q.question === question);
+            addMessage(question, 'user');
+            if (predefined) {
+                addMessage(predefined.answer, 'ai');
+            }
+        });
     });
 }
 
