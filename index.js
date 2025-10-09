@@ -103,8 +103,10 @@ function renderApp() {
                                 </div>
                             `).join('')}
                         </div>
-                        <button class="slider-btn prev" aria-label="Previous testimonial">&lt;</button>
-                        <button class="slider-btn next" aria-label="Next testimonial">&gt;</button>
+                        <div class="slider-nav">
+                            <button class="slider-btn prev" aria-label="Previous testimonial">&lt;</button>
+                            <button class="slider-btn next" aria-label="Next testimonial">&gt;</button>
+                        </div>
                     </div>
                 </div>
             </section>
