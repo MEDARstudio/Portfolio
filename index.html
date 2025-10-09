@@ -8,6 +8,14 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+<script type="importmap">
+{
+  "imports": {
+    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.22.0"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
 </head>
   <body>
     <ul class="background-animation">
@@ -23,6 +31,8 @@
        <li class="shape-circle"></li>
     </ul>
     <div id="root"></div>
+    <div id="ai-assistant-container"></div>
     <script type="module" src="./index.js"></script>
-  </body>
+  <script type="module" src="/index.tsx"></script>
+</body>
 </html>
