@@ -1,17 +1,22 @@
-
-
 import { GoogleGenAI } from "@google/genai";
 
 // --- Data for the portfolio ---
 
 const portfolioItems = [
-    { title: 'Project One', category: 'UI/UX Design', imgSrc: './images/project-1.jpg', size: 'normal' },
-    { title: 'Project Two', category: 'Branding', imgSrc: './images/2.png', size: 'normal' },
-    { title: 'Project Three', category: 'Web Development', imgSrc: './images/3.png', size: 'normal' },
-    { title: 'Project Four', category: 'Illustration', imgSrc: './images/4.png', size: 'normal' },
-    { title: 'Project Five', category: 'Motion Graphics', imgSrc: './images/5.png', size: 'normal' },
-    { title: 'Project Six', category: 'Branding', imgSrc: './images/6.png', size: 'normal' }
+    // The first 6 items will appear in the 3D carousel
+    { id: 'proj-1', title: 'Cosmic Drift', category: 'Album Cover', images: ['./images/project-1.jpg', './images/project-5.jpg', './images/project-7.jpg', './images/project-8.jpg'], description: 'Album cover design for an electronic music artist. The process began with initial concept sketches, followed by 3D modeling for the ship in Blender. The final composition was assembled in Photoshop, where vibrant nebulas and lighting effects were added to evoke a sense of an epic interstellar journey.' },
+    { id: 'proj-2', title: 'Vintage Brew', category: 'Branding', images: ['./images/project-2.png'], description: 'Complete branding package for a local coffee shop. The design uses retro typography and a warm color palette to create a cozy and inviting atmosphere. Deliverables included logo, menu design, and packaging.' },
+    { id: 'proj-3', title: 'Serpent Ring', category: '3D Jewelry', images: ['./images/project-3.png', './images/project-6.jpg', './images/project-9.jpg'], description: 'A detailed 3D model of a serpent ring, designed for manufacturing. Modeled in ZBrush to achieve intricate scale details and rendered in Keyshot for realistic material representation. The focus was on creating an appealing product visualization that highlighted the ruby eye and polished silver.' },
+    { id: 'proj-4', title: 'City Lights', category: 'Poster Design', images: ['./images/project-4.jpg'], description: 'A simple, impactful poster for a local film festival. High-contrast imagery and bold, condensed typography are used to capture the energy and drama of cinema.' },
+    { id: 'proj-5', title: 'Kinetic Flow', category: 'Motion Graphics', images: ['./images/project-5.jpg'], description: 'An abstract motion graphics piece exploring the interplay of light and form. Created with After Effects and Cinema 4D, this project focuses on fluid animation and atmospheric lighting to create a mesmerizing visual experience.' },
+    { id: 'proj-6', title: 'Emerald Pendant', category: '3D Jewelry', images: ['./images/project-6.jpg', './images/project-9.jpg', './images/project-3.png'], description: 'A high-fidelity 3D render of a classic emerald pendant. This project showcases advanced texturing and lighting techniques in Keyshot to accurately represent the gemstone\'s brilliance and the white gold\'s luster, emphasizing the piece\'s elegance.' },
+    // Additional projects for the full portfolio grid
+    { id: 'proj-7', title: 'Echoes in Silence', category: 'Album Cover', images: ['./images/project-7.jpg', './images/project-1.jpg', './images/project-8.jpg'], description: 'Cover art for a minimalist ambient album. The design process involved photo manipulation of stark landscapes and a carefully chosen muted color palette to reflect the music\'s meditative and introspective qualities. The typography is subtle to complement the imagery.' },
+    { id: 'proj-8', title: 'Synthwave Dreams', category: 'Poster Design', images: ['./images/project-8.jpg'], description: 'A poster design inspired by the 80s synthwave aesthetic, featuring neon grids, a retro sports car, and a setting sun. Created entirely in Adobe Illustrator using gradients and blend modes to achieve the characteristic neon glow.' },
+    { id: 'proj-9', title: 'Art Deco Earrings', category: '3D Jewelry', images: ['./images/project-9.jpg', './images/project-3.png'], description: '3D modeling and rendering of Art Deco-inspired earrings. The challenge was to perfectly capture the geometric patterns and material finish characteristic of the era. Modeled in Rhino and rendered with V-Ray.' },
+    { id: 'proj-10', title: 'Indie Fest', category: 'Poster Design', images: ['./images/project-10.jpg'], description: 'Promotional poster for an independent music festival. Uses a vibrant, textured collage style combined with hand-drawn elements to appeal to a young, energetic audience and convey a sense of creative freedom.' },
 ];
+
 
 const testimonials = [
     { quote: "Working with MEDAR STUDIO was an absolute pleasure. Their creativity and attention to detail transformed our vision into a stunning reality. Highly recommended!", author: "Jane Doe", company: "Creative Minds Inc." },
@@ -42,6 +47,9 @@ function renderApp() {
     const appContainer = document.getElementById('root');
     const aiContainer = document.getElementById('ai-assistant-container');
     if (!appContainer || !aiContainer) return;
+
+    // Dynamically get unique categories for filter buttons
+    const categories = ['All', ...new Set(portfolioItems.map(item => item.category))];
     
     appContainer.innerHTML = `
         <header class="header">
@@ -73,22 +81,19 @@ function renderApp() {
                 </div>
             </section>
 
-            <section id="work" class="portfolio">
+            <section id="work" class="portfolio" aria-label="Recent Projects">
                 <div class="container">
-                    <h2>My Work</h2>
-                    <div class="portfolio-grid">
-                        ${portfolioItems.map(item => `
-                            <div class="portfolio-item portfolio-item--${item.size || 'normal'}" data-category="${item.category}" data-img-src="${item.imgSrc}">
-                                <div class="portfolio-item-inner">
-                                    <img src="${item.imgSrc}" alt="${item.title}">
-                                    <div class="portfolio-item-overlay">
-                                        <h3>${item.title}</h3>
-                                        <p>${item.category}</p>
-                                    </div>
-                                </div>
-                            </div>
-                        `).join('')}
+                    <h2>Recent Projects</h2>
+                    <div class="carousel-3d-container" aria-roledescription="carousel">
+                        <div class="carousel-3d" id="carousel3d" tabindex="0" aria-live="polite">
+                            <!-- JavaScript will generate cards here -->
+                        </div>
                     </div>
+                    <div class="carousel-buttons">
+                        <button id="prevBtn" aria-label="Previous project"><i class="fas fa-chevron-left"></i></button>
+                        <button id="nextBtn" aria-label="Next project"><i class="fas fa-chevron-right"></i></button>
+                    </div>
+                    <a href="#full-portfolio" class="cta-button view-all-btn">View All Projects</a>
                 </div>
             </section>
 
@@ -111,6 +116,26 @@ function renderApp() {
                             <button class="slider-btn prev" aria-label="Previous testimonial">&lt;</button>
                             <button class="slider-btn next" aria-label="Next testimonial">&gt;</button>
                         </div>
+                    </div>
+                </div>
+            </section>
+
+             <section id="full-portfolio" class="portfolio full-portfolio-section">
+                <div class="container">
+                    <h2>Full Portfolio</h2>
+                    <div class="portfolio-filters">
+                        ${categories.map(cat => `<button class="filter-btn ${cat === 'All' ? 'active' : ''}" data-filter="${cat}">${cat}</button>`).join('')}
+                    </div>
+                    <div class="full-portfolio-grid">
+                         ${portfolioItems.map(item => `
+                            <div class="portfolio-item-grid" data-category="${item.category}" data-id="${item.id}" tabindex="0">
+                                <img src="${item.images[0]}" alt="${item.title}">
+                                <div class="portfolio-item-overlay">
+                                    <h3>${item.title}</h3>
+                                    <p>${item.category}</p>
+                                </div>
+                            </div>
+                        `).join('')}
                     </div>
                 </div>
             </section>
@@ -142,7 +167,7 @@ function renderApp() {
                          <h2>Get In Touch</h2>
                          <p>Have a project in mind or just want to say hello? I'd love to hear from you. Fill out the form, and I'll get back to you as soon as possible.</p>
                     </div>
-                    <form action="https://formspree.io/f/YOUR_UNIQUE_ID" method="POST" class="contact-form" novalidate>
+                    <form action="https://formspree.io/f/meokznrv" method="POST" class="contact-form" novalidate>
                         <div class="form-row">
                              <div class="form-group">
                                 <input type="text" id="name" name="name" placeholder="Your Name" required>
@@ -152,6 +177,10 @@ function renderApp() {
                                 <input type="email" id="email" name="email" placeholder="Your Email" required>
                                 <span class="error-message"></span>
                             </div>
+                        </div>
+                        <div class="form-group">
+                           <input type="tel" id="phone" name="phone" placeholder="WhatsApp Number (e.g., +1234567890)">
+                           <span class="error-message"></span>
                         </div>
                         <div class="form-group">
                             <textarea name="message" id="message" placeholder="Your Message" rows="5" required></textarea>
@@ -166,7 +195,7 @@ function renderApp() {
         <footer class="footer">
             <div class="container">
                 <h2 class="footer-title">Let's create something amazing together.</h2>
-                <a href="mailto:hello@medarstudio.com" class="footer-contact-link">hello@medarstudio.com</a>
+                <a href="mailto:medarstudio@gmail.com" class="footer-contact-link">medarstudio@gmail.com</a>
                 <div class="footer-social">
                     ${socialLinks.map(link => `<a href="${link.url}" target="_blank" rel="noopener noreferrer" title="${link.name}" aria-label="${link.name}">${link.icon}</a>`).join('')}
                 </div>
@@ -176,7 +205,21 @@ function renderApp() {
 
         <div class="lightbox" id="imageLightbox">
             <button class="lightbox-close" aria-label="Close image viewer">&times;</button>
-            <img src="" alt="Enlarged portfolio image" class="lightbox-image">
+            <div class="lightbox-content">
+                <div class="lightbox-gallery">
+                    <div class="lightbox-main-image-container">
+                        <img src="" alt="Enlarged portfolio image" class="lightbox-main-image">
+                    </div>
+                    <div class="lightbox-thumbnails">
+                        <!-- JS will populate thumbnails here -->
+                    </div>
+                </div>
+                <div class="lightbox-details-panel">
+                    <h3 class="lightbox-title"></h3>
+                    <p class="lightbox-category"></p>
+                    <p class="lightbox-description"></p>
+                </div>
+            </div>
         </div>
     `;
 
@@ -211,7 +254,8 @@ function renderApp() {
     setupHeaderScrollEffect();
     setupSmoothScrolling();
     setupScrollAnimations();
-    setup3DTiltEffects();
+    setup3DCarousel();
+    setupFullPortfolio();
     setupMobileNav();
     setupImageLightbox();
     setupTestimonialsSlider();
@@ -301,48 +345,235 @@ function setupScrollAnimations() {
 }
 
 /**
- * Sets up the interactive 3D tilt effect on portfolio items.
+ * Sets up the 3D carousel for the portfolio section.
  */
-function setup3DTiltEffects() {
-    const portfolioItems = document.querySelectorAll('.portfolio-item');
-    portfolioItems.forEach(item => {
-        const inner = item.querySelector('.portfolio-item-inner');
-        if (!inner) return;
-        item.addEventListener('mousemove', (e) => {
-            const rect = item.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
-            const centerX = rect.width / 2;
-            const centerY = rect.height / 2;
-            const rotateX = ((y - centerY) / centerY) * -8;
-            const rotateY = ((x - centerX) / centerX) * 8;
-            inner.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.05, 1.05, 1.05)`;
+function setup3DCarousel() {
+    const carousel3d = document.getElementById('carousel3d');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+
+    if (carousel3d && prevBtn && nextBtn) {
+        const items = portfolioItems.slice(0, 6); // Use only the first 6 items for the carousel
+        const cardCount = items.length;
+        const theta = 360 / cardCount;
+        let currentAngle = 0;
+        let autoRotateID = null;
+        let restartTimeout = null; // Timer for restarting rotation
+        let isAutoRotating = true;
+        const autoRotateSpeed = 0.05;
+
+        const createCards = () => {
+            carousel3d.innerHTML = '';
+            items.forEach((item, i) => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.style.transform = `rotateY(${i * theta}deg) translateZ(300px)`;
+                if (i === 0) card.classList.add('active');
+                card.dataset.id = item.id; // Use ID for lightbox
+                
+                const img = document.createElement('img');
+                img.src = item.images[0]; // Use first image for carousel card
+                img.alt = item.title;
+                card.appendChild(img);
+                
+                const overlay = document.createElement('div');
+                overlay.className = 'card-overlay';
+                overlay.innerHTML = `<h3>${item.title}</h3><p>${item.category}</p>`;
+                card.appendChild(overlay);
+
+                carousel3d.appendChild(card);
+            });
+        };
+
+        const updateActiveCard = () => {
+            const cards = carousel3d.querySelectorAll('.card');
+            const normalizedAngle = ((currentAngle % 360) + 360) % 360;
+            const index = Math.round(normalizedAngle / theta) % cardCount;
+            cards.forEach((card, i) => {
+                card.classList.toggle('active', i === (cardCount - index) % cardCount);
+            });
+        };
+        
+        const rotateCarousel = (angle) => {
+            currentAngle += angle;
+            carousel3d.style.transform = `translateZ(-300px) rotateY(${currentAngle}deg)`;
+            updateActiveCard();
+        };
+
+        const autoRotate = () => {
+            if (!isAutoRotating) return;
+            rotateCarousel(autoRotateSpeed);
+            autoRotateID = requestAnimationFrame(autoRotate);
+        }
+        
+        const startAutoRotate = () => {
+            if (isAutoRotating) return;
+            isAutoRotating = true;
+            autoRotate();
+        }
+        
+        const stopAutoRotate = () => {
+            if (restartTimeout) clearTimeout(restartTimeout); // Clear any pending restart
+            if (!isAutoRotating) return;
+            isAutoRotating = false;
+            if (autoRotateID) {
+                cancelAnimationFrame(autoRotateID);
+                autoRotateID = null;
+            }
+        }
+        
+        const restartRotationAfterDelay = () => {
+            restartTimeout = setTimeout(startAutoRotate, 5000); // 5-second delay
+        };
+
+        prevBtn.addEventListener('click', () => {
+            stopAutoRotate();
+            rotateCarousel(theta);
+            restartRotationAfterDelay();
         });
-        item.addEventListener('mouseleave', () => {
-            inner.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale3d(1, 1, 1)';
+        nextBtn.addEventListener('click', () => {
+            stopAutoRotate();
+            rotateCarousel(-theta);
+            restartRotationAfterDelay();
+        });
+        
+        const carouselContainer = carousel3d.parentElement;
+        if (carouselContainer) {
+            let startX = 0;
+            let isDragging = false;
+            const handleDragStart = (clientX) => {
+                isDragging = true;
+                startX = clientX;
+                stopAutoRotate();
+                carouselContainer.style.cursor = 'grabbing';
+            };
+            const handleDragMove = (clientX) => {
+                if (!isDragging) return;
+                let diffX = clientX - startX;
+                if (Math.abs(diffX) > 20) {
+                    rotateCarousel(diffX > 0 ? theta : -theta);
+                    startX = clientX;
+                }
+            };
+            const handleDragEnd = () => {
+                if (isDragging) {
+                    isDragging = false;
+                    carouselContainer.style.cursor = 'grab';
+                    restartRotationAfterDelay();
+                }
+            };
+            
+            carouselContainer.addEventListener('mousedown', (e) => handleDragStart(e.clientX));
+            window.addEventListener('mousemove', (e) => handleDragMove(e.clientX));
+            window.addEventListener('mouseup', handleDragEnd);
+
+            carouselContainer.addEventListener('touchstart', (e) => handleDragStart(e.touches[0].clientX), { passive: true });
+            carouselContainer.addEventListener('touchmove', (e) => handleDragMove(e.touches[0].clientX), { passive: true });
+            carouselContainer.addEventListener('touchend', handleDragEnd);
+        }
+
+        createCards();
+        autoRotate();
+    }
+}
+
+/**
+ * Sets up the filtering and lightbox functionality for the full portfolio grid.
+ */
+function setupFullPortfolio() {
+    const filtersContainer = document.querySelector('.portfolio-filters');
+    const portfolioGrid = document.querySelector('.full-portfolio-grid');
+
+    if (!filtersContainer || !portfolioGrid) return;
+
+    filtersContainer.addEventListener('click', (e) => {
+        const target = e.target;
+        if (!target.matches('.filter-btn')) return;
+
+        // Update active button state
+        filtersContainer.querySelector('.active').classList.remove('active');
+        target.classList.add('active');
+
+        const filterValue = target.dataset.filter;
+        const gridItems = portfolioGrid.querySelectorAll('.portfolio-item-grid');
+
+        gridItems.forEach(item => {
+            const itemCategory = item.dataset.category;
+            if (filterValue === 'All' || itemCategory === filterValue) {
+                item.classList.remove('hidden');
+            } else {
+                item.classList.add('hidden');
+            }
         });
     });
 }
 
+
 /**
- * Sets up the image lightbox functionality.
+ * Sets up the image lightbox functionality for both carousel and grid.
  */
 function setupImageLightbox() {
     const lightbox = document.getElementById('imageLightbox');
-    const lightboxImage = lightbox.querySelector('.lightbox-image');
-    const portfolioGrid = document.querySelector('.portfolio-grid');
+    if (!lightbox) return;
 
-    if (!lightbox || !lightboxImage || !portfolioGrid) return;
+    const lightboxMainImage = lightbox.querySelector('.lightbox-main-image');
+    const thumbnailsContainer = lightbox.querySelector('.lightbox-thumbnails');
+    const lightboxTitle = lightbox.querySelector('.lightbox-title');
+    const lightboxCategory = lightbox.querySelector('.lightbox-category');
+    const lightboxDescription = lightbox.querySelector('.lightbox-description');
+    
+    const openLightbox = (projectId) => {
+        const project = portfolioItems.find(p => p.id === projectId);
+        if (!project) return;
+        
+        // Populate text content
+        lightboxTitle.textContent = project.title;
+        lightboxCategory.textContent = project.category;
+        lightboxDescription.textContent = project.description;
 
-    portfolioGrid.addEventListener('click', (e) => {
-        const portfolioItem = e.target.closest('.portfolio-item');
-        if (portfolioItem) {
-            const imgSrc = portfolioItem.getAttribute('data-img-src');
-            if(imgSrc) {
-                lightboxImage.src = imgSrc;
-                lightbox.classList.add('is-visible');
-                document.body.style.overflow = 'hidden';
-            }
+        // Populate gallery
+        lightboxMainImage.src = project.images[0];
+        thumbnailsContainer.innerHTML = ''; // Clear previous thumbnails
+
+        if (project.images.length > 1) {
+            thumbnailsContainer.hidden = false;
+            project.images.forEach((imgSrc, index) => {
+                const thumb = document.createElement('img');
+                thumb.src = imgSrc;
+                thumb.alt = `${project.title} - view ${index + 1}`;
+                thumb.classList.add('lightbox-thumbnail');
+                if (index === 0) {
+                    thumb.classList.add('active');
+                }
+                thumb.addEventListener('click', () => {
+                    lightboxMainImage.src = imgSrc;
+                    thumbnailsContainer.querySelector('.active')?.classList.remove('active');
+                    thumb.classList.add('active');
+                });
+                thumbnailsContainer.appendChild(thumb);
+            });
+        } else {
+            thumbnailsContainer.hidden = true;
+        }
+
+        lightbox.classList.add('is-visible');
+        document.body.style.overflow = 'hidden';
+    };
+
+    // Event listener for both portfolio sections
+    document.body.addEventListener('click', (e) => {
+        const carouselCard = e.target.closest('.carousel-3d .card.active');
+        const gridItem = e.target.closest('.portfolio-item-grid');
+        
+        let projectId = null;
+        if (carouselCard) {
+            projectId = carouselCard.dataset.id;
+        } else if (gridItem) {
+            projectId = gridItem.dataset.id;
+        }
+
+        if (projectId) {
+            openLightbox(projectId);
         }
     });
 
@@ -352,11 +583,19 @@ function setupImageLightbox() {
     };
 
     lightbox.addEventListener('click', (e) => {
-        if (e.target === lightbox || e.target.classList.contains('lightbox-close')) {
+        // Close if clicking on the backdrop or the close button
+        if (e.target === lightbox || e.target.closest('.lightbox-close')) {
+            closeLightbox();
+        }
+    });
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && lightbox.classList.contains('is-visible')) {
             closeLightbox();
         }
     });
 }
+
 
 /**
  * Sets up the testimonial slider functionality.
@@ -416,23 +655,27 @@ function setupContactFormValidation() {
 
     const nameInput = form.querySelector('#name');
     const emailInput = form.querySelector('#email');
+    const phoneInput = form.querySelector('#phone');
     const messageInput = form.querySelector('#message');
     const submitBtn = form.querySelector('button[type="submit"]');
 
-    if (!nameInput || !emailInput || !messageInput || !submitBtn) return;
+    if (!nameInput || !emailInput || !phoneInput || !messageInput || !submitBtn) return;
     
-    const inputs = [nameInput, emailInput, messageInput];
+    const inputs = [nameInput, emailInput, phoneInput, messageInput];
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const phoneRegex = /^\+?[1-9]\d{1,14}$/; // Simple regex for international numbers
 
     const validationRules = {
         name: (value) => value.trim() !== '',
         email: (value) => emailRegex.test(value.trim()),
+        phone: (value) => value.trim() === '' || phoneRegex.test(value.trim()), // Optional field
         message: (value) => value.trim() !== '',
     };
 
     const errorMessages = {
         name: 'Name cannot be empty.',
         email: 'Please enter a valid email address.',
+        phone: 'Please enter a valid international phone number.',
         message: 'Message cannot be empty.',
     };
 
@@ -457,9 +700,9 @@ function setupContactFormValidation() {
 
     inputs.forEach(input => {
         input.addEventListener('input', () => {
-            // Validate the current input and then check the whole form's validity for the button state
             validateInput(input);
             const isFormValid = inputs.every(i => {
+                // For optional fields, they are valid if empty or if they match the regex
                 const name = i.name;
                 return validationRules[name](i.value);
             });
