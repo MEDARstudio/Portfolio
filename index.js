@@ -9,63 +9,63 @@ const portfolioItems = [
         id: 'proj-catharsis',
         title: 'Catharsis',
         category: 'Album Cover',
-        coverImage: 'cover catharsis.png',
+        coverImage: 'images/cover catharsis.png',
         projectBrief: 'Album cover design and promotional materials for an artist\'s new release, "Catharsis". The project aimed to capture a powerful, transformative, and visually striking theme.',
         process: [
-            { video: 'video out now.mp4', text: 'Promotional video announcing the release of the new album.' },
-            { image: 'cover catharsis v2.png', text: 'An alternate version of the cover art, exploring a different color palette and composition.' },
-            { image: 'catharsis verso.png', text: 'The back cover (verso) design, maintaining brand consistency while providing tracklist information.' },
-            { image: 'cover catharsis.png', text: 'The final front cover artwork, which is also used in the 3D carousel.' }
+            { video: 'images/video out now.mp4', text: 'Promotional video announcing the release of the new album.' },
+            { image: 'images/cover catharsis v2.png', text: 'An alternate version of the cover art, exploring a different color palette and composition.' },
+            { image: 'images/catharsis verso.png', text: 'The back cover (verso) design, maintaining brand consistency while providing tracklist information.' },
+            { image: 'images/cover catharsis.png', text: 'The final front cover artwork, which is also used in the 3D carousel.' }
         ]
     },
     {
         id: 'proj-match-1',
         title: 'Al Ahly vs Inter Miami',
         category: 'Poster Design',
-        coverImage: 'ahly vs miami.png',
+        coverImage: 'images/ahly vs miami.png',
         projectBrief: 'Promotional match day poster for a fictional friendly between Al Ahly and Inter Miami.',
         process: [
-            { image: 'ahly vs miami.png', text: 'The final poster design, using dynamic imagery and bold typography to create excitement for the event.' }
+            { image: 'images/ahly vs miami.png', text: 'The final poster design, using dynamic imagery and bold typography to create excitement for the event.' }
         ]
     },
      {
         id: 'proj-match-2',
         title: 'Man City vs Wydad AC',
         category: 'Poster Design',
-        coverImage: 'man city vs wydad.png',
+        coverImage: 'images/man city vs wydad.png',
         projectBrief: 'A poster concept for a Club World Cup match featuring Manchester City and Wydad AC.',
         process: [
-            { image: 'man city vs wydad.png', text: 'The design emphasizes the clash of champions with high-contrast visuals and team branding.' }
+            { image: 'images/man city vs wydad.png', text: 'The design emphasizes the clash of champions with high-contrast visuals and team branding.' }
         ]
     },
     {
         id: 'proj-f1-1',
         title: 'Norris at Baku 2025',
         category: 'Poster Design',
-        coverImage: 'norris baku 2025.png',
+        coverImage: 'images/norris baku 2025.png',
         projectBrief: 'A futuristic poster celebrating Lando Norris for the 2025 Azerbaijan Grand Prix in Baku.',
         process: [
-            { image: 'norris baku 2025.png', text: 'The artwork combines elements of speed, technology, and the iconic Baku city circuit.' }
+            { image: 'images/norris baku 2025.png', text: 'The artwork combines elements of speed, technology, and the iconic Baku city circuit.' }
         ]
     },
     {
         id: 'proj-match-3',
         title: 'EST vs Flamengo',
         category: 'Poster Design',
-        coverImage: 'taraji vs flamengo.png',
+        coverImage: 'images/taraji vs flamengo.png',
         projectBrief: 'Match day poster concept for a competitive clash between Espérance Sportive de Tunis and Flamengo.',
         process: [
-            { image: 'taraji vs flamengo.png', text: 'The design uses fiery colors and dynamic player poses to represent the intensity of the match.' }
+            { image: 'images/taraji vs flamengo.png', text: 'The design uses fiery colors and dynamic player poses to represent the intensity of the match.' }
         ]
     },
     {
         id: 'proj-fight-1',
         title: 'Zlal vs Emmett',
         category: 'Poster Design',
-        coverImage: 'zallal vs emmett.png',
+        coverImage: 'images/zallal vs emmett.png',
         projectBrief: 'Fight night poster for a fictional martial arts bout between two formidable opponents.',
         process: [
-            { image: 'zallal vs emmett.png', text: 'The poster uses a gritty, high-contrast style to highlight the intensity and focus of the fighters.' }
+            { image: 'images/zallal vs emmett.png', text: 'The poster uses a gritty, high-contrast style to highlight the intensity and focus of the fighters.' }
         ]
     },
     {
