@@ -3,7 +3,30 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>MEDAR STUDIO | Design Portfolio</title>
+    
+    <!-- SEO & Social Sharing Meta Tags -->
+    <meta name="description" content="A creative design agency portfolio for MEDAR STUDIO, showcasing our projects, services, and contact information." />
+    <meta name="keywords" content="MEDAR STUDIO, creative design, design agency, UI/UX, branding, web development, visual arts, motion graphics, 3D jewelry, portfolio" />
+    <meta name="author" content="MEDAR STUDIO" />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://www.medarstudio.com/" />
+    <meta property="og:title" content="MEDAR STUDIO | Creative Design Agency" />
+    <meta property="og:description" content="A creative design agency specializing in UI/UX, branding, and visual arts. Let's create something amazing together." />
+    <meta property="og:image" content="https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=1470&auto=format&fit=crop" />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="https://www.medarstudio.com/" />
+    <meta property="twitter:title" content="MEDAR STUDIO | Creative Design Agency" />
+    <meta property="twitter:description" content="A creative design agency specializing in UI/UX, branding, and visual arts. Let's create something amazing together." />
+    <meta property="twitter:image" content="https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=1470&auto=format&fit=crop" />
+
+    <!-- Theme Color for Browsers -->
+    <meta name="theme-color" content="#0a0a1f">
+    
+    <title>MEDAR STUDIO | Creative Design Agency</title>
     <link rel="stylesheet" href="./index.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -19,18 +42,15 @@
 <link rel="stylesheet" href="/index.css">
 </head>
   <body>
-    <ul class="background-animation">
-       <li class="shape-blob"></li>
-       <li class="shape-square"></li>
-       <li class="shape-circle"></li>
-       <li class="shape-blob"></li>
-       <li class="shape-square"></li>
-       <li class="shape-blob"></li>
-       <li class="shape-circle"></li>
-       <li class="shape-square"></li>
-       <li class="shape-blob"></li>
-       <li class="shape-circle"></li>
-    </ul>
+    <div class="background-grid"></div>
+    <div class="background-shapes">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
     <div id="root"></div>
     <div id="ai-assistant-container"></div>
     <script type="module" src="./index.js"></script>

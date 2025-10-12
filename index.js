@@ -1,26 +1,145 @@
+
+
 import { GoogleGenAI } from "@google/genai";
 
 // --- Data for the portfolio ---
 
 const portfolioItems = [
-    // The first 6 items will appear in the 3D carousel
-    { id: 'proj-1', title: 'Cosmic Drift', category: 'Album Cover', images: ['./images/project1.png', './images/project-5.jpg', './images/project-7.jpg', './images/project-8.jpg'], description: 'Album cover design for an electronic music artist. The process began with initial concept sketches, followed by 3D modeling for the ship in Blender. The final composition was assembled in Photoshop, where vibrant nebulas and lighting effects were added to evoke a sense of an epic interstellar journey.' },
-    { id: 'proj-2', title: 'Vintage Brew', category: 'Branding', images: ['./images/project2.png'], description: 'Complete branding package for a local coffee shop. The design uses retro typography and a warm color palette to create a cozy and inviting atmosphere. Deliverables included logo, menu design, and packaging.' },
-    { id: 'proj-3', title: 'Serpent Ring', category: '3D Jewelry', images: ['./images/project3.png', './images/project-6.jpg', './images/project-9.jpg'], description: 'A detailed 3D model of a serpent ring, designed for manufacturing. Modeled in ZBrush to achieve intricate scale details and rendered in Keyshot for realistic material representation. The focus was on creating an appealing product visualization that highlighted the ruby eye and polished silver.' },
-    { id: 'proj-4', title: 'City Lights', category: 'Poster Design', images: ['./images/project-4.jpg'], description: 'A simple, impactful poster for a local film festival. High-contrast imagery and bold, condensed typography are used to capture the energy and drama of cinema.' },
-    { id: 'proj-5', title: 'Kinetic Flow', category: 'Motion Graphics', images: ['./images/project-5.jpg'], description: 'An abstract motion graphics piece exploring the interplay of light and form. Created with After Effects and Cinema 4D, this project focuses on fluid animation and atmospheric lighting to create a mesmerizing visual experience.' },
-    { id: 'proj-6', title: 'Emerald Pendant', category: '3D Jewelry', images: ['./images/project-6.jpg', './images/project-9.jpg', './images/project-3.png'], description: 'A high-fidelity 3D render of a classic emerald pendant. This project showcases advanced texturing and lighting techniques in Keyshot to accurately represent the gemstone\'s brilliance and the white gold\'s luster, emphasizing the piece\'s elegance.' },
-    // Additional projects for the full portfolio grid
-    { id: 'proj-7', title: 'Echoes in Silence', category: 'Album Cover', images: ['./images/project-7.jpg', './images/project-1.jpg', './images/project-8.jpg'], description: 'Cover art for a minimalist ambient album. The design process involved photo manipulation of stark landscapes and a carefully chosen muted color palette to reflect the music\'s meditative and introspective qualities. The typography is subtle to complement the imagery.' },
-    { id: 'proj-8', title: 'Synthwave Dreams', category: 'Poster Design', images: ['./images/project-8.jpg'], description: 'A poster design inspired by the 80s synthwave aesthetic, featuring neon grids, a retro sports car, and a setting sun. Created entirely in Adobe Illustrator using gradients and blend modes to achieve the characteristic neon glow.' },
-    { id: 'proj-9', title: 'Art Deco Earrings', category: '3D Jewelry', images: ['./images/project-9.jpg', './images/project-3.png'], description: '3D modeling and rendering of Art Deco-inspired earrings. The challenge was to perfectly capture the geometric patterns and material finish characteristic of the era. Modeled in Rhino and rendered with V-Ray.' },
-    { id: 'proj-10', title: 'Indie Fest', category: 'Poster Design', images: ['./images/project-10.jpg'], description: 'Promotional poster for an independent music festival. Uses a vibrant, textured collage style combined with hand-drawn elements to appeal to a young, energetic audience and convey a sense of creative freedom.' },
+    {
+        id: 'proj-catharsis',
+        title: 'Catharsis',
+        category: 'Album Cover',
+        coverImage: 'cover catharsis.png',
+        projectBrief: 'Album cover design and promotional materials for an artist\'s new release, "Catharsis". The project aimed to capture a powerful, transformative, and visually striking theme.',
+        process: [
+            { video: 'video out now.mp4', text: 'Promotional video announcing the release of the new album.' },
+            { image: 'cover catharsis v2.png', text: 'An alternate version of the cover art, exploring a different color palette and composition.' },
+            { image: 'catharsis verso.png', text: 'The back cover (verso) design, maintaining brand consistency while providing tracklist information.' },
+            { image: 'cover catharsis.png', text: 'The final front cover artwork, which is also used in the 3D carousel.' }
+        ]
+    },
+    {
+        id: 'proj-match-1',
+        title: 'Al Ahly vs Inter Miami',
+        category: 'Poster Design',
+        coverImage: 'ahly vs miami.png',
+        projectBrief: 'Promotional match day poster for a fictional friendly between Al Ahly and Inter Miami.',
+        process: [
+            { image: 'ahly vs miami.png', text: 'The final poster design, using dynamic imagery and bold typography to create excitement for the event.' }
+        ]
+    },
+     {
+        id: 'proj-match-2',
+        title: 'Man City vs Wydad AC',
+        category: 'Poster Design',
+        coverImage: 'man city vs wydad.png',
+        projectBrief: 'A poster concept for a Club World Cup match featuring Manchester City and Wydad AC.',
+        process: [
+            { image: 'man city vs wydad.png', text: 'The design emphasizes the clash of champions with high-contrast visuals and team branding.' }
+        ]
+    },
+    {
+        id: 'proj-f1-1',
+        title: 'Norris at Baku 2025',
+        category: 'Poster Design',
+        coverImage: 'norris baku 2025.png',
+        projectBrief: 'A futuristic poster celebrating Lando Norris for the 2025 Azerbaijan Grand Prix in Baku.',
+        process: [
+            { image: 'norris baku 2025.png', text: 'The artwork combines elements of speed, technology, and the iconic Baku city circuit.' }
+        ]
+    },
+    {
+        id: 'proj-match-3',
+        title: 'EST vs Flamengo',
+        category: 'Poster Design',
+        coverImage: 'taraji vs flamengo.png',
+        projectBrief: 'Match day poster concept for a competitive clash between Espérance Sportive de Tunis and Flamengo.',
+        process: [
+            { image: 'taraji vs flamengo.png', text: 'The design uses fiery colors and dynamic player poses to represent the intensity of the match.' }
+        ]
+    },
+    {
+        id: 'proj-fight-1',
+        title: 'Zlal vs Emmett',
+        category: 'Poster Design',
+        coverImage: 'zallal vs emmett.png',
+        projectBrief: 'Fight night poster for a fictional martial arts bout between two formidable opponents.',
+        process: [
+            { image: 'zallal vs emmett.png', text: 'The poster uses a gritty, high-contrast style to highlight the intensity and focus of the fighters.' }
+        ]
+    },
+    {
+        id: 'proj-11',
+        title: 'Quantum Dashboard',
+        category: 'UI/UX Design',
+        coverImage: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=1470&auto=format&fit=crop',
+        projectBrief: 'A sleek and intuitive dashboard design for a data analytics platform. The focus was on clear data visualization and a seamless user experience.',
+        process: [
+            { image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=1470&auto=format&fit=crop', text: 'The main dashboard view, showcasing various data widgets and charts. A dark theme was chosen for better contrast and reduced eye strain.' },
+            { text: 'Extensive user research and wireframing were conducted to optimize the information architecture and user flow before diving into the visual design.' }
+        ]
+    },
+    {
+        id: 'proj-12',
+        title: 'Aura Cosmetics',
+        category: 'Branding',
+        coverImage: 'https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?q=80&w=1287&auto=format&fit=crop',
+        projectBrief: 'A complete branding identity for a new line of organic cosmetics. The brand aims to feel luxurious, natural, and modern.',
+        process: [
+            { image: 'https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?q=80&w=1287&auto=format&fit=crop', text: 'The final logo and packaging design, featuring a minimalist aesthetic with elegant typography and a soft color palette derived from natural ingredients.' }
+        ]
+    },
+    {
+        id: 'proj-13',
+        title: 'Data Stream',
+        category: 'Motion Graphics',
+        coverImage: 'https://images.unsplash.com/photo-1535223289827-42f1e9919769?q=80&w=1287&auto=format&fit=crop',
+        projectBrief: 'A dynamic logo animation for a tech startup, visualizing the concept of data flowing and transforming.',
+        process: [
+            { image: 'https://images.unsplash.com/photo-1535223289827-42f1e9919769?q=80&w=1287&auto=format&fit=crop', text: 'A still frame from the animation showing abstract particle streams forming the company logo. The effect was created using After Effects and Trapcode Particular.' }
+        ]
+    },
+    { 
+        id: 'proj-1', 
+        title: 'Cosmic Drift', 
+        category: 'Album Cover', 
+        coverImage: 'https://images.unsplash.com/photo-1534796636912-3b95b3ab5986?q=80&w=1471&auto=format&fit=crop',
+        projectBrief: 'Album cover design for an electronic music artist. The goal was to evoke a sense of an epic interstellar journey.',
+        process: [
+            { image: 'https://images.unsplash.com/photo-1534796636912-3b95b3ab5986?q=80&w=1471&auto=format&fit=crop', text: 'The final composition, assembled in Photoshop. Vibrant nebulas and lighting effects were added to create a dynamic and atmospheric scene.' },
+            { image: 'https://images.unsplash.com/photo-1610986665037-9934c83a7c66?q=80&w=1335&auto=format&fit=crop', text: '3D modeling for the main spaceship was done in Blender. This stage focused on creating a sleek, futuristic design that would be the centerpiece of the artwork.' },
+            { image: 'https://images.unsplash.com/photo-1502134249126-9f3755a50d78?q=80&w=1470&auto=format&fit=crop', text: 'Early concept sketches explored different ship designs and compositions. This helped to establish the overall mood and direction before moving to 3D.' },
+            { image: 'https://images.unsplash.com/photo-1612423284934-2850a4ea6b0f?q=80&w=1470&auto=format&fit=crop', text: 'A detail shot of the texture work on the ship\'s hull, showing the metallic finish and subtle weathering effects to add realism.' }
+        ]
+    },
+    { 
+        id: 'proj-2', 
+        title: 'Vintage Brew', 
+        category: 'Branding', 
+        coverImage: 'https://images.unsplash.com/photo-1511920183276-542a97fb2b3f?q=80&w=1287&auto=format&fit=crop',
+        projectBrief: 'A complete branding package for a local coffee shop aiming for a retro, cozy, and inviting atmosphere.',
+        process: [
+            { image: 'https://images.unsplash.com/photo-1511920183276-542a97fb2b3f?q=80&w=1287&auto=format&fit=crop', text: 'The final logo and branding elements applied to a mockup of a coffee bag. The design uses retro typography and a warm color palette.' },
+            { text: 'Deliverables included a full logo suite (primary, secondary, and icon), menu designs, and packaging concepts to ensure brand consistency across all touchpoints.' }
+        ] 
+    },
+    { 
+        id: 'proj-3', 
+        title: 'Serpent Ring', 
+        category: '3D Jewelry', 
+        coverImage: 'https://images.unsplash.com/photo-1611652032997-54a23b2c2a71?q=80&w=1374&auto=format&fit=crop',
+        projectBrief: 'A detailed 3D model of a serpent ring, designed for manufacturing and product visualization.',
+        process: [
+            { image: 'https://images.unsplash.com/photo-1611652032997-54a23b2c2a71?q=80&w=1374&auto=format&fit=crop', text: 'The final render, showcasing the polished silver and the ruby eye. The focus was on creating a realistic material representation in Keyshot.' },
+            { image: 'https://images.unsplash.com/photo-1599643477877-530eb83abc8e?q=80&w=1287&auto=format&fit=crop', text: 'A different angle highlighting the intricate scale details, which were sculpted in ZBrush to give the model a high level of realism.' },
+            { image: 'https://images.unsplash.com/photo-1605100804763-247f67b3557e?q=80&w=1470&auto=format&fit=crop', text: 'An early wireframe view from the modeling phase, showing the topology of the serpent\'s head and the clean geometry required for a smooth final product.' }
+        ]
+    }
 ];
-
 
 const testimonials = [
     { quote: "Working with MEDAR STUDIO was an absolute pleasure. Their creativity and attention to detail transformed our vision into a stunning reality. Highly recommended!", author: "Jane Doe", company: "Creative Minds Inc." },
-    { quote: "The level of professionalism and the quality of the final product exceeded all our expectations. A truly talented designer who listens and delivers.", author: "John Smith", company: "Future Ventures" },
+    { quote: "The level of professionalism and the quality of the final product exceeded all our expectations. A truly talented team that listens and delivers.", author: "John Smith", company: "Future Ventures" },
     { quote: "Incredible design sense and a collaborative spirit. They took our brand to the next level. We couldn't be happier with the results.", author: "Emily White", company: "Innovate Co." }
 ];
 
@@ -34,9 +153,13 @@ const socialLinks = [
 
 const quickQuestions = [
     { question: "What services do you offer?", answer: "MEDAR STUDIO offers a range of creative services including UI/UX Design, Branding, Web Development, Illustration, and Motion Graphics. Do you have a specific project in mind?" },
-    { question: "Tell me more about you.", answer: "I'm the creative force behind MEDAR STUDIO. I'm a passionate designer and visual artist dedicated to crafting unique and impactful digital experiences. You can learn more in the 'About Me' section!" },
-    { question: "How can I start a project?", answer: "It's simple! Just head over to the 'Contact' section, fill out the form with some details about your project, and I'll get back to you as soon as possible to discuss the next steps." },
+    { question: "Tell me more about your studio.", answer: "MEDAR STUDIO is a creative space where our team of passionate designers and visual artists collaborate to craft unique and impactful digital experiences. You can learn more in the 'About Us' section!" },
+    { question: "How can we start a project?", answer: "It's simple! Just head over to the 'Contact' section, fill out the form with some details about your project, and we'll get back to you as soon as possible to discuss the next steps." },
 ];
+
+// --- Application State ---
+let currentSection = 'home';
+let inactivityTimer;
 
 // --- Core Application Logic ---
 
@@ -48,18 +171,23 @@ function renderApp() {
     const aiContainer = document.getElementById('ai-assistant-container');
     if (!appContainer || !aiContainer) return;
 
-    // Dynamically get unique categories for filter buttons
     const categories = ['All', ...new Set(portfolioItems.map(item => item.category))];
-    
+    const logoText = "MEDAR STUDIO";
+    const animatedLogoHTML = logoText.split('').map((char, index) => 
+        `<span style="animation-delay: ${index * 0.05}s">${char}</span>`
+    ).join('');
+
     appContainer.innerHTML = `
         <header class="header">
             <div class="container">
-                <a href="#home" class="logo">MEDAR STUDIO</a>
+                <a href="#home" class="logo">
+                    <div class="logo-animated">${animatedLogoHTML}</div>
+                </a>
                 <nav class="main-nav">
                     <ul>
                         <li><a href="#home">Home</a></li>
                         <li><a href="#work">Work</a></li>
-                        <li><a href="#about">About</a></li>
+                        <li><a href="#about">About Us</a></li>
                         <li><a href="#contact" class="nav-cta">Let's Connect</a></li>
                     </ul>
                 </nav>
@@ -75,7 +203,7 @@ function renderApp() {
         <main>
             <section id="home" class="hero">
                 <div class="container">
-                    <h1>Creative Designer & Visual Artist</h1>
+                    <h1>Creative Design & Visual Arts Studio</h1>
                     <p>Crafting unique digital experiences with passion and precision.</p>
                     <a href="#contact" class="cta-button">Let's Talk</a>
                 </div>
@@ -99,7 +227,7 @@ function renderApp() {
 
             <section id="testimonials" class="testimonials">
                 <div class="container">
-                    <h2>What My Clients Say</h2>
+                    <h2>What Our Clients Say</h2>
                     <div class="testimonial-slider-container">
                         <div class="testimonial-slider">
                             ${testimonials.map(t => `
@@ -120,17 +248,19 @@ function renderApp() {
                 </div>
             </section>
 
-             <section id="full-portfolio" class="portfolio full-portfolio-section">
+            <section id="full-portfolio" class="portfolio full-portfolio-section">
                 <div class="container">
                     <h2>Full Portfolio</h2>
-                    <div class="portfolio-filters">
-                        ${categories.map(cat => `<button class="filter-btn ${cat === 'All' ? 'active' : ''}" data-filter="${cat}">${cat}</button>`).join('')}
+                    <div class="portfolio-filters" role="tablist" aria-label="Portfolio categories">
+                        ${categories.map((cat, index) => `
+                            <button class="filter-btn ${index === 0 ? 'active' : ''}" data-filter="${cat.toLowerCase().replace(/\s+/g, '-')}">${cat}</button>
+                        `).join('')}
                     </div>
-                    <div class="full-portfolio-grid">
-                         ${portfolioItems.map(item => `
-                            <div class="portfolio-item-grid" data-category="${item.category}" data-id="${item.id}" tabindex="0">
-                                <img src="${item.images[0]}" alt="${item.title}">
-                                <div class="portfolio-item-overlay">
+                    <div class="portfolio-grid">
+                        ${portfolioItems.map(item => `
+                            <div class="portfolio-card" data-id="${item.id}" data-category="${item.category.toLowerCase().replace(/\s+/g, '-')}" tabindex="0" role="button" aria-label="View project: ${item.title}">
+                                <img src="${item.coverImage}" alt="${item.title}">
+                                <div class="portfolio-card-overlay">
                                     <h3>${item.title}</h3>
                                     <p>${item.category}</p>
                                 </div>
@@ -165,7 +295,7 @@ function renderApp() {
                 <div class="container contact-container">
                     <div class="contact-info">
                          <h2>Get In Touch</h2>
-                         <p>Have a project in mind or just want to say hello? I'd love to hear from you. Fill out the form, and I'll get back to you as soon as possible.</p>
+                         <p>Have a project in mind or just want to say hello? We'd love to hear from you. Fill out the form, and we'll get back to you as soon as possible.</p>
                     </div>
                     <form action="https://formspree.io/f/meokznrv" method="POST" class="contact-form" novalidate>
                         <div class="form-row">
@@ -199,27 +329,22 @@ function renderApp() {
                 <div class="footer-social">
                     ${socialLinks.map(link => `<a href="${link.url}" target="_blank" rel="noopener noreferrer" title="${link.name}" aria-label="${link.name}">${link.icon}</a>`).join('')}
                 </div>
-                <p class="footer-copyright">&copy; ${new Date().getFullYear()} MEDAR STUDIO. All Rights Reserved.</p>
+                <p class="footer-copyright">&copy; ${new Date().getFullYear()} <span class="studio-name animated-gradient-text">MEDAR STUDIO.</span> All Rights Reserved.</p>
             </div>
         </footer>
 
-        <div class="lightbox" id="imageLightbox">
-            <button class="lightbox-close" aria-label="Close image viewer">&times;</button>
-            <div class="lightbox-content">
-                <div class="lightbox-gallery">
-                    <div class="lightbox-main-image-container">
-                        <img src="" alt="Enlarged portfolio image" class="lightbox-main-image">
-                    </div>
-                    <div class="lightbox-thumbnails">
-                        <!-- JS will populate thumbnails here -->
-                    </div>
+        <div id="projectViewer" class="project-viewer" role="dialog" aria-modal="true" aria-hidden="true">
+             <button class="project-viewer-close" aria-label="Close project viewer">&times;</button>
+             <div class="project-viewer-content">
+                <header class="project-viewer-header">
+                    <h2 class="project-viewer-title"></h2>
+                    <p class="project-viewer-category"></p>
+                    <p class="project-viewer-brief"></p>
+                </header>
+                <div class="project-viewer-body">
+                    <!-- JS will populate project steps here -->
                 </div>
-                <div class="lightbox-details-panel">
-                    <h3 class="lightbox-title"></h3>
-                    <p class="lightbox-category"></p>
-                    <p class="lightbox-description"></p>
-                </div>
-            </div>
+             </div>
         </div>
     `;
 
@@ -255,13 +380,16 @@ function renderApp() {
     setupSmoothScrolling();
     setupScrollAnimations();
     setup3DCarousel();
-    setupFullPortfolio();
+    setupPortfolioFilters();
+    setupProjectViewer();
     setupMobileNav();
-    setupImageLightbox();
     setupTestimonialsSlider();
     setupAboutToggle();
     setupAIAssistant();
-    setupContactFormValidation();
+    setupContactForm();
+    setupInteractiveBackground();
+    setupSectionObserver();
+    setupInactivityTimer();
 }
 
 /**
@@ -360,7 +488,7 @@ function setup3DCarousel() {
         let autoRotateID = null;
         let restartTimeout = null; // Timer for restarting rotation
         let isAutoRotating = true;
-        const autoRotateSpeed = 0.05;
+        const autoRotateSpeed = 0.08;
 
         const createCards = () => {
             carousel3d.innerHTML = '';
@@ -369,10 +497,10 @@ function setup3DCarousel() {
                 card.className = 'card';
                 card.style.transform = `rotateY(${i * theta}deg) translateZ(300px)`;
                 if (i === 0) card.classList.add('active');
-                card.dataset.id = item.id; // Use ID for lightbox
+                card.dataset.id = item.id; // Use ID for project viewer
                 
                 const img = document.createElement('img');
-                img.src = item.images[0]; // Use first image for carousel card
+                img.src = item.coverImage;
                 img.alt = item.title;
                 card.appendChild(img);
                 
@@ -478,120 +606,139 @@ function setup3DCarousel() {
 }
 
 /**
- * Sets up the filtering and lightbox functionality for the full portfolio grid.
+ * Sets up animated filtering for the main portfolio grid.
  */
-function setupFullPortfolio() {
+function setupPortfolioFilters() {
     const filtersContainer = document.querySelector('.portfolio-filters');
-    const portfolioGrid = document.querySelector('.full-portfolio-grid');
-
-    if (!filtersContainer || !portfolioGrid) return;
-
+    if (!filtersContainer) return;
+    
     filtersContainer.addEventListener('click', (e) => {
         const target = e.target;
         if (!target.matches('.filter-btn')) return;
-
-        // Update active button state
-        filtersContainer.querySelector('.active').classList.remove('active');
-        target.classList.add('active');
-
-        const filterValue = target.dataset.filter;
-        const gridItems = portfolioGrid.querySelectorAll('.portfolio-item-grid');
-
-        gridItems.forEach(item => {
-            const itemCategory = item.dataset.category;
-            if (filterValue === 'All' || itemCategory === filterValue) {
-                item.classList.remove('hidden');
-            } else {
-                item.classList.add('hidden');
-            }
-        });
+        filterPortfolio(target.dataset.filter);
     });
 }
 
+function filterPortfolio(filter) {
+    const filtersContainer = document.querySelector('.portfolio-filters');
+    const portfolioGrid = document.querySelector('.portfolio-grid');
+    if (!filtersContainer || !portfolioGrid) return 'Portfolio section not found.';
 
-/**
- * Sets up the image lightbox functionality for both carousel and grid.
- */
-function setupImageLightbox() {
-    const lightbox = document.getElementById('imageLightbox');
-    if (!lightbox) return;
+    const target = filtersContainer.querySelector(`[data-filter="${filter.toLowerCase()}"]`);
+    if (!target) return `Category '${filter}' not found.`;
 
-    const lightboxMainImage = lightbox.querySelector('.lightbox-main-image');
-    const thumbnailsContainer = lightbox.querySelector('.lightbox-thumbnails');
-    const lightboxTitle = lightbox.querySelector('.lightbox-title');
-    const lightboxCategory = lightbox.querySelector('.lightbox-category');
-    const lightboxDescription = lightbox.querySelector('.lightbox-description');
+    if (target.classList.contains('active')) return `Category '${filter}' is already active.`;
+
+    filtersContainer.querySelector('.filter-btn.active')?.classList.remove('active');
+    target.classList.add('active');
     
-    const openLightbox = (projectId) => {
-        const project = portfolioItems.find(p => p.id === projectId);
-        if (!project) return;
-        
-        // Populate text content
-        lightboxTitle.textContent = project.title;
-        lightboxCategory.textContent = project.category;
-        lightboxDescription.textContent = project.description;
+    const portfolioCards = Array.from(portfolioGrid.children);
+    const transitionDuration = 400;
 
-        // Populate gallery
-        lightboxMainImage.src = project.images[0];
-        thumbnailsContainer.innerHTML = ''; // Clear previous thumbnails
+    portfolioCards.forEach(card => {
+        const cardCategory = card.dataset.category;
+        const shouldBeVisible = filter.toLowerCase() === 'all' || cardCategory === filter.toLowerCase().replace(/\s+/g, '-');
+        const isVisible = !card.classList.contains('is-filtered-out');
 
-        if (project.images.length > 1) {
-            thumbnailsContainer.hidden = false;
-            project.images.forEach((imgSrc, index) => {
-                const thumb = document.createElement('img');
-                thumb.src = imgSrc;
-                thumb.alt = `${project.title} - view ${index + 1}`;
-                thumb.classList.add('lightbox-thumbnail');
-                if (index === 0) {
-                    thumb.classList.add('active');
-                }
-                thumb.addEventListener('click', () => {
-                    lightboxMainImage.src = imgSrc;
-                    thumbnailsContainer.querySelector('.active')?.classList.remove('active');
-                    thumb.classList.add('active');
-                });
-                thumbnailsContainer.appendChild(thumb);
-            });
-        } else {
-            thumbnailsContainer.hidden = true;
-        }
-
-        lightbox.classList.add('is-visible');
-        document.body.style.overflow = 'hidden';
-    };
-
-    // Event listener for both portfolio sections
-    document.body.addEventListener('click', (e) => {
-        const carouselCard = e.target.closest('.carousel-3d .card.active');
-        const gridItem = e.target.closest('.portfolio-item-grid');
-        
-        let projectId = null;
-        if (carouselCard) {
-            projectId = carouselCard.dataset.id;
-        } else if (gridItem) {
-            projectId = gridItem.dataset.id;
-        }
-
-        if (projectId) {
-            openLightbox(projectId);
+        if (isVisible && !shouldBeVisible) {
+            card.classList.add('is-filtered-out');
         }
     });
 
-    const closeLightbox = () => {
-        lightbox.classList.remove('is-visible');
+    setTimeout(() => {
+        portfolioCards.forEach(card => {
+            const cardCategory = card.dataset.category;
+            const shouldBeVisible = filter.toLowerCase() === 'all' || cardCategory === filter.toLowerCase().replace(/\s+/g, '-');
+            
+            card.style.display = shouldBeVisible ? '' : 'none';
+
+            if (shouldBeVisible) {
+                setTimeout(() => card.classList.remove('is-filtered-out'), 10);
+            }
+        });
+    }, transitionDuration);
+
+    return `Filtered portfolio to show ${filter}.`;
+}
+
+/**
+ * Sets up the Behance-style project viewer modal.
+ */
+function setupProjectViewer() {
+    const viewer = document.getElementById('projectViewer');
+    if (!viewer) return;
+
+    const titleEl = viewer.querySelector('.project-viewer-title');
+    const categoryEl = viewer.querySelector('.project-viewer-category');
+    const briefEl = viewer.querySelector('.project-viewer-brief');
+    const bodyEl = viewer.querySelector('.project-viewer-body');
+    const contentEl = viewer.querySelector('.project-viewer-content');
+    
+    const openViewer = (projectId) => {
+        const project = portfolioItems.find(p => p.id === projectId);
+        if (!project || !titleEl || !categoryEl || !briefEl || !bodyEl) return;
+        
+        titleEl.textContent = project.title;
+        categoryEl.textContent = project.category;
+        briefEl.textContent = project.projectBrief;
+
+        bodyEl.innerHTML = project.process.map(step => {
+            let stepHTML = '<div class="project-process-step">';
+            if (step.video) {
+                stepHTML += `<video src="${step.video}" controls autoplay muted loop playsinline alt="Project video for ${project.title}"></video>`;
+            } else if (step.image) {
+                stepHTML += `<img src="${step.image}" alt="Project detail for ${project.title}">`;
+            }
+            if (step.text) {
+                stepHTML += `<p>${step.text}</p>`;
+            }
+            stepHTML += '</div>';
+            return stepHTML;
+        }).join('');
+
+        viewer.classList.add('is-visible');
+        viewer.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+        contentEl.scrollTop = 0;
+    };
+
+    const closeViewer = () => {
+        viewer.classList.remove('is-visible');
+        viewer.setAttribute('aria-hidden', 'true');
         document.body.style.overflow = '';
     };
 
-    lightbox.addEventListener('click', (e) => {
-        // Close if clicking on the backdrop or the close button
-        if (e.target === lightbox || e.target.closest('.lightbox-close')) {
-            closeLightbox();
+    document.body.addEventListener('click', (e) => {
+        const portfolioCard = e.target.closest('[data-id]');
+        if (portfolioCard) {
+             if (portfolioCard.matches('.carousel-3d .card') && !portfolioCard.classList.contains('active')) {
+                return;
+            }
+            e.preventDefault();
+            openViewer(portfolioCard.dataset.id);
+        }
+    });
+    
+    document.body.addEventListener('keydown', (e) => {
+        const portfolioCard = e.target.closest('[data-id]');
+        if (portfolioCard && (e.key === 'Enter' || e.key === ' ')) {
+             if (portfolioCard.matches('.carousel-3d .card') && !portfolioCard.classList.contains('active')) {
+                return;
+            }
+            e.preventDefault();
+            openViewer(portfolioCard.dataset.id);
+        }
+    });
+
+    viewer.addEventListener('click', (e) => {
+        if (e.target.closest('.project-viewer-close') || e.target === viewer) {
+            closeViewer();
         }
     });
 
     document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && lightbox.classList.contains('is-visible')) {
-            closeLightbox();
+        if (e.key === 'Escape' && viewer.classList.contains('is-visible')) {
+            closeViewer();
         }
     });
 }
@@ -638,9 +785,7 @@ function setupAboutToggle() {
     if (!readMoreBtn || !fullTextContainer) return;
 
     readMoreBtn.addEventListener('click', () => {
-        // Add a class to trigger the transition
         aboutContent.classList.add('is-expanded');
-        // Hide the button after click
         readMoreBtn.style.display = 'none';
     });
 }
@@ -649,7 +794,7 @@ function setupAboutToggle() {
 /**
  * Sets up real-time validation for the contact form.
  */
-function setupContactFormValidation() {
+function setupContactForm() {
     const form = document.querySelector('.contact-form');
     if (!form) return;
 
@@ -698,15 +843,19 @@ function setupContactFormValidation() {
         return isValid;
     }
 
+    function checkFormValidity() {
+        const isNameValid = validationRules.name(nameInput.value);
+        const isEmailValid = validationRules.email(emailInput.value);
+        const isMessageValid = validationRules.message(messageInput.value);
+        const isPhoneValid = validationRules.phone(phoneInput.value);
+
+        submitBtn.disabled = !(isNameValid && isEmailValid && isMessageValid && isPhoneValid);
+    }
+
     inputs.forEach(input => {
         input.addEventListener('input', () => {
             validateInput(input);
-            const isFormValid = inputs.every(i => {
-                // For optional fields, they are valid if empty or if they match the regex
-                const name = i.name;
-                return validationRules[name](i.value);
-            });
-            submitBtn.disabled = !isFormValid;
+            checkFormValidity();
         });
     });
 }
@@ -726,20 +875,20 @@ function setupAIAssistant() {
 
     if (!fab || !chatWindow || !closeBtn || !chatForm || !input || !messagesContainer) return;
 
-    let chat;
+    let textChat;
+
     try {
         const ai = new GoogleGenAI({apiKey: process.env.API_KEY});
-        chat = ai.chats.create({
+        textChat = ai.chats.create({
             model: 'gemini-2.5-flash',
             config: {
-                systemInstruction: "You are a friendly and professional AI assistant for MEDAR STUDIO, a creative design portfolio by Mohamed Amine Amarir. His skills include UI/UX Design, Branding, Web Development, Illustration, and Motion Graphics. Your goal is to helpfully answer visitor questions and encourage them to use the contact form for project inquiries. Keep answers concise and engaging.",
+                systemInstruction: "You are a friendly and professional AI assistant for MEDAR STUDIO, a creative design agency. Your goal is to answer questions about the studio and its services. Our team's skills include UI/UX Design, Branding, Web Development, Illustration, and Motion Graphics. Encourage users to use the contact form for project inquiries.",
             },
         });
     } catch (error) {
         console.error("Failed to initialize Gemini AI:", error);
         addMessage("Sorry, the AI assistant is currently unavailable.", 'ai');
     }
-
 
     const toggleChat = () => {
         const isHidden = chatWindow.hidden;
@@ -748,7 +897,15 @@ function setupAIAssistant() {
         if (isHidden) {
             input.focus();
             if (messagesContainer.children.length === 0) {
-                 addMessage("Hello! I'm the AI assistant for MEDAR STUDIO. How can I help you today?", 'ai');
+                 let greeting = "Hello! How can I help you learn more about MEDAR STUDIO today?";
+                 if (currentSection === 'work' || currentSection === 'full-portfolio') {
+                    greeting = "Hello! I see you're looking at our projects. Is there a specific type of work you're interested in?";
+                 } else if (currentSection === 'about') {
+                    greeting = "Hi there! Exploring our story? Let me know if you have any questions about our studio's philosophy.";
+                 } else if (currentSection === 'contact') {
+                    greeting = "Ready to connect? I can help answer any final questions you have before you get in touch.";
+                 }
+                 addMessage(greeting, 'ai');
             }
         }
     };
@@ -756,16 +913,10 @@ function setupAIAssistant() {
     fab.addEventListener('click', toggleChat);
     closeBtn.addEventListener('click', toggleChat);
 
-    function addMessage(text, sender, isStreaming = false) {
+    function addMessage(text, sender) {
         const messageEl = document.createElement('div');
         messageEl.classList.add('message', `${sender}-message`);
-        
-        if (isStreaming) {
-            messageEl.innerHTML = text; // Assumes markdown-it will be used or basic HTML
-        } else {
-            messageEl.textContent = text;
-        }
-
+        messageEl.textContent = text;
         messagesContainer.appendChild(messageEl);
         messagesContainer.scrollTop = messagesContainer.scrollHeight;
         return messageEl;
@@ -773,44 +924,26 @@ function setupAIAssistant() {
     
     async function handleUserMessage(messageText) {
         addMessage(messageText, 'user');
+        const thinkingEl = addMessage('...', 'ai');
+        thinkingEl.classList.add('thinking');
 
-        const responseEl = addMessage('...', 'ai');
-        responseEl.classList.add('thinking');
-
-        if (!chat) {
-            responseEl.textContent = "I can't connect to the AI service right now.";
-            responseEl.classList.remove('thinking');
+        if (!textChat) {
+            thinkingEl.textContent = "We can't connect to the AI service right now.";
+            thinkingEl.classList.remove('thinking');
             return;
         }
 
         try {
-            const stream = await chat.sendMessageStream({ message: messageText });
-
-            let responseText = "";
-            let firstChunk = true;
-
-            for await (const chunk of stream) {
-                if (firstChunk) {
-                    responseText = "";
-                    responseEl.classList.remove('thinking');
-                    firstChunk = false;
-                }
-                responseText += chunk.text;
-                responseEl.textContent = responseText;
-                messagesContainer.scrollTop = messagesContainer.scrollHeight;
-            }
-
-            if (firstChunk) { // Handle case where stream is empty (e.g. safety block)
-                responseEl.textContent = "I'm not sure how to respond to that.";
-                responseEl.classList.remove('thinking');
-            }
+            const response = await textChat.sendMessage({ message: messageText });
+            thinkingEl.textContent = response.text;
+            thinkingEl.classList.remove('thinking');
         } catch (error) {
             console.error("Gemini API Error:", error);
-            responseEl.textContent = "Oops! Something went wrong while getting a response.";
-            responseEl.classList.remove('thinking');
+            thinkingEl.textContent = "Oops! Something went wrong while getting a response.";
+            thinkingEl.classList.remove('thinking');
         }
     }
-
+    
     chatForm.addEventListener('submit', (e) => {
         e.preventDefault();
         const messageText = input.value.trim();
@@ -832,6 +965,81 @@ function setupAIAssistant() {
     });
 }
 
+/**
+ * Sets up a dynamic background that reacts to mouse movement.
+ */
+function setupInteractiveBackground() {
+    window.addEventListener('mousemove', e => {
+        document.documentElement.style.setProperty('--mouse-x', `${e.clientX}px`);
+        document.documentElement.style.setProperty('--mouse-y', `${e.clientY}px`);
+    });
+}
+
+/**
+ * Observes page sections to provide context to the AI.
+ */
+function setupSectionObserver() {
+    const sections = document.querySelectorAll('section[id]');
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting && entry.intersectionRatio >= 0.5) {
+                currentSection = entry.target.id;
+            }
+        });
+    }, { threshold: 0.5 });
+
+    sections.forEach(section => observer.observe(section));
+}
+
+/**
+ * Sets up a timer to proactively engage the user after a period of inactivity.
+ */
+function setupInactivityTimer() {
+    function showProactiveMessage() {
+        const chatWindow = document.querySelector('.chat-window');
+        if (chatWindow && chatWindow.hidden) {
+            const fab = document.querySelector('.chat-fab');
+            fab.classList.add('proactive-glow');
+            
+            let proactiveBubble = document.querySelector('.proactive-bubble');
+            if (!proactiveBubble) {
+                proactiveBubble = document.createElement('div');
+                proactiveBubble.className = 'proactive-bubble';
+                fab.parentElement.appendChild(proactiveBubble);
+            }
+            
+            let message = "Have any questions?";
+            if (currentSection === 'work' || currentSection === 'full-portfolio') {
+                message = "Interested in our projects? Ask me anything!";
+            } else if (currentSection === 'about') {
+                message = "Curious about our studio?";
+            }
+            proactiveBubble.textContent = message;
+            proactiveBubble.classList.add('visible');
+
+            setTimeout(() => proactiveBubble.classList.remove('visible'), 8000);
+        }
+    }
+
+    function resetInactivityTimer() {
+        const fab = document.querySelector('.chat-fab');
+        const bubble = document.querySelector('.proactive-bubble');
+        fab?.classList.remove('proactive-glow');
+        bubble?.classList.remove('visible');
+
+        clearTimeout(inactivityTimer);
+        inactivityTimer = setTimeout(showProactiveMessage, 30000);
+    }
+
+    window.addEventListener('mousemove', resetInactivityTimer, { passive: true });
+    window.addEventListener('keydown', resetInactivityTimer, { passive: true });
+    window.addEventListener('scroll', resetInactivityTimer, { passive: true });
+    window.addEventListener('click', resetInactivityTimer, { passive: true });
+    resetInactivityTimer();
+}
+
 
 // Initial render of the application when the DOM is ready.
-document.addEventListener('DOMContentLoaded', renderApp);
+document.addEventListener('DOMContentLoaded', () => {
+    renderApp();
+});
