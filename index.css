@@ -560,7 +560,7 @@ section { padding: 6rem 0; }
 
 .carousel-3d-container {
   perspective: 1200px;
-  width: 320px;
+  width: 360px;
   height: 400px;
   margin: 40px auto 30px auto;
   position: relative;
@@ -583,12 +583,12 @@ section { padding: 6rem 0; }
 
 .carousel-3d .card {
   position: absolute;
-  width: 200px;
+  width: 240px;
   height: 300px;
   left: 50%;
   top: 50%;
   transform-style: preserve-3d;
-  margin-left: -100px;
+  margin-left: -120px;
   margin-top: -150px;
   border-radius: 12px;
   box-shadow: 0 10px 30px rgba(0,0,0,0.4);
@@ -650,7 +650,7 @@ section { padding: 6rem 0; }
 
 
 .carousel-buttons {
-  width: 320px;
+  width: 360px;
   margin: 0 auto 20px auto;
   display: flex;
   justify-content: center;
