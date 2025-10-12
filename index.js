@@ -486,7 +486,7 @@ function setup3DCarousel() {
         const theta = 360 / cardCount;
         let currentAngle = 0;
         let autoRotateID = null;
-        let restartTimeout = null; // Timer for restarting rotation
+        let restartTimeout = null;
         let isAutoRotating = true;
         const autoRotateSpeed = 0.08;
 
@@ -532,26 +532,26 @@ function setup3DCarousel() {
             if (!isAutoRotating) return;
             rotateCarousel(autoRotateSpeed);
             autoRotateID = requestAnimationFrame(autoRotate);
-        }
+        };
         
         const startAutoRotate = () => {
             if (isAutoRotating) return;
             isAutoRotating = true;
             autoRotate();
-        }
+        };
         
         const stopAutoRotate = () => {
-            if (restartTimeout) clearTimeout(restartTimeout); // Clear any pending restart
+            if (restartTimeout) clearTimeout(restartTimeout);
             if (!isAutoRotating) return;
             isAutoRotating = false;
             if (autoRotateID) {
                 cancelAnimationFrame(autoRotateID);
                 autoRotateID = null;
             }
-        }
+        };
         
         const restartRotationAfterDelay = () => {
-            restartTimeout = setTimeout(startAutoRotate, 5000); // 5-second delay
+            restartTimeout = setTimeout(startAutoRotate, 5000);
         };
 
         prevBtn.addEventListener('click', () => {
@@ -568,36 +568,81 @@ function setup3DCarousel() {
         const carouselContainer = carousel3d.parentElement;
         if (carouselContainer) {
             let startX = 0;
+            let startY = 0;
             let isDragging = false;
-            const handleDragStart = (clientX) => {
+            
+            // --- Mouse Handlers ---
+            const handleMouseDown = (e) => {
                 isDragging = true;
-                startX = clientX;
+                startX = e.clientX;
                 stopAutoRotate();
                 carouselContainer.style.cursor = 'grabbing';
             };
-            const handleDragMove = (clientX) => {
+
+            const handleMouseMove = (e) => {
                 if (!isDragging) return;
-                let diffX = clientX - startX;
-                if (Math.abs(diffX) > 20) {
+                let diffX = e.clientX - startX;
+                if (Math.abs(diffX) > 10) { 
                     rotateCarousel(diffX > 0 ? theta : -theta);
-                    startX = clientX;
+                    startX = e.clientX;
                 }
             };
-            const handleDragEnd = () => {
+            
+            const handleMouseUp = () => {
                 if (isDragging) {
                     isDragging = false;
                     carouselContainer.style.cursor = 'grab';
                     restartRotationAfterDelay();
                 }
             };
-            
-            carouselContainer.addEventListener('mousedown', (e) => handleDragStart(e.clientX));
-            window.addEventListener('mousemove', (e) => handleDragMove(e.clientX));
-            window.addEventListener('mouseup', handleDragEnd);
 
-            carouselContainer.addEventListener('touchstart', (e) => handleDragStart(e.touches[0].clientX), { passive: true });
-            carouselContainer.addEventListener('touchmove', (e) => handleDragMove(e.touches[0].clientX), { passive: true });
-            carouselContainer.addEventListener('touchend', handleDragEnd);
+            carouselContainer.addEventListener('mousedown', handleMouseDown);
+            window.addEventListener('mousemove', handleMouseMove);
+            window.addEventListener('mouseup', handleMouseUp);
+            window.addEventListener('mouseleave', handleMouseUp);
+
+            // --- Touch Handlers (to prevent conflict with mobile browser gestures) ---
+            const handleTouchStart = (e) => {
+                isDragging = true;
+                startX = e.touches[0].clientX;
+                startY = e.touches[0].clientY;
+                stopAutoRotate();
+            };
+
+            const handleTouchMove = (e) => {
+                if (!isDragging) return;
+
+                const currentX = e.touches[0].clientX;
+                const currentY = e.touches[0].clientY;
+                const diffX = currentX - startX;
+                const diffY = currentY - startY;
+
+                // Only handle the swipe if it's primarily horizontal
+                if (Math.abs(diffX) > Math.abs(diffY)) {
+                    e.preventDefault(); // Prevent browser navigation/scrolling
+                    
+                    if (Math.abs(diffX) > 20) {
+                        rotateCarousel(diffX > 0 ? theta : -theta);
+                        // Update start positions for the next move segment
+                        startX = currentX;
+                        startY = currentY;
+                    }
+                } else {
+                    // It's a vertical swipe, so let the user scroll and stop our drag logic
+                    isDragging = false;
+                }
+            };
+            
+            const handleTouchEnd = () => {
+                if (isDragging) {
+                    isDragging = false;
+                    restartRotationAfterDelay();
+                }
+            };
+
+            carouselContainer.addEventListener('touchstart', handleTouchStart, { passive: true });
+            carouselContainer.addEventListener('touchmove', handleTouchMove, { passive: false });
+            carouselContainer.addEventListener('touchend', handleTouchEnd);
         }
 
         createCards();
