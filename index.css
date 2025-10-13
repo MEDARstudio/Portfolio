@@ -38,7 +38,7 @@ body {
     background: 
         radial-gradient(
             600px circle at var(--mouse-x) var(--mouse-y),
-            rgba(0, 245, 195, 0.08),
+            rgba(148, 0, 211, 0.1),
             transparent 80%
         ),
         var(--bg-gradient);
@@ -53,9 +53,15 @@ body {
     transition: background-color var(--color-transition-speed) ease, color var(--color-transition-speed) ease;
 }
 
+
 #root {
     position: relative;
     z-index: 1;
+    opacity: 0;
+    transition: opacity 0.8s ease-in-out;
+}
+#root.visible {
+    opacity: 1;
 }
 
 .container {
@@ -101,6 +107,108 @@ a:hover {
   white-space: nowrap;
   border: 0;
 }
+
+/* --- Preloader "Simple Fade" Transition --- */
+#preloader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100svh; /* Use svh for better mobile compatibility */
+    z-index: 9999;
+    background: var(--bg-gradient);
+    background-size: 200% 200%;
+    animation: animateGradient 25s ease infinite;
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.5s ease-out, visibility 0.5s ease-out;
+}
+
+#preloader.is-hiding {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+#particle-container {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+.particle {
+    position: absolute;
+    border-radius: 50%;
+    animation: swirlAndFade 2.5s ease-in-out forwards;
+}
+.particle.cyan { background: var(--accent-color-start); }
+.particle.purple { background: var(--accent-color-end); }
+
+
+@keyframes swirlAndFade {
+    0% {
+        transform: scale(0) rotate(0deg);
+        opacity: 0.1;
+    }
+    30% {
+        opacity: 0.8;
+    }
+    100% {
+        transform: scale(1.5) rotate(360deg);
+        opacity: 0;
+    }
+}
+
+.genesis-logo {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    font-size: 2.5rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: #ffffff;
+    white-space: pre;
+}
+
+
+.genesis-logo span {
+    display: inline-block;
+    opacity: 0;
+    transform: translateX(-15px);
+    animation: preloadRevealLetter 0.5s ease-out forwards;
+}
+
+@keyframes preloadRevealLetter {
+    from {
+        opacity: 0;
+        transform: translateX(-15px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.genesis-logo::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-image: var(--accent-gradient);
+    background-size: 200% auto;
+    animation: preloadDrawUnderline 0.8s ease-out 1.2s forwards, animateGradient 3s linear infinite 1.2s;
+}
+
+@keyframes preloadDrawUnderline {
+    to {
+        width: 100%;
+    }
+}
+
 
 /* --- Background Grid Animation --- */
 .background-grid {
@@ -156,6 +264,7 @@ a:hover {
     animation: slide-horizontal 20s linear infinite;
     opacity: 0.5;
 }
+
 
 @keyframes slide-vertical {
     from { background-position: 0 0; }
@@ -413,7 +522,7 @@ section { padding: 6rem 0; }
 }
 
 .hero {
-    min-height: 100vh;
+    min-height: 100svh; /* Use svh for better mobile compatibility */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -560,6 +669,7 @@ section { padding: 6rem 0; }
 
 .carousel-3d-container {
   perspective: 1200px;
+  max-width: 100%;
   width: 360px;
   height: 400px;
   margin: 40px auto 30px auto;
@@ -650,6 +760,7 @@ section { padding: 6rem 0; }
 
 
 .carousel-buttons {
+  max-width: 100%;
   width: 360px;
   margin: 0 auto 20px auto;
   display: flex;
@@ -893,13 +1004,50 @@ section { padding: 6rem 0; }
 .slider-btn.next { right: 1rem; }
 
 /* --- Contact Section --- */
-.contact-container { display: grid; grid-template-columns: 1fr 1.2fr; gap: 3rem; align-items: center; }
-.contact-info h2 { text-align: left; }
-.contact-info p { color: var(--secondary-text-color); }
-.contact-form { display: flex; flex-direction: column; gap: 1.5rem; }
-.form-row { display: flex; gap: 1.5rem; }
-.form-group { position: relative; width: 100%; }
-.form-row .form-group { width: 50%; }
+.contact-container {
+    max-width: 800px;
+    margin: 0 auto;
+    background-color: transparent;
+    position: relative;
+}
+
+.contact-container-inner {
+    padding: 3rem;
+    background-color: var(--surface-color);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    backdrop-filter: blur(5px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+.contact-info {
+    text-align: center;
+    margin-bottom: 2.5rem;
+}
+.contact-info h2 {
+    text-align: center;
+}
+.contact-info p {
+    color: var(--secondary-text-color);
+    max-width: 600px;
+    margin: 0 auto;
+}
+.contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+.form-row {
+    display: flex;
+    gap: 1.5rem;
+}
+.form-group {
+    position: relative;
+    width: 100%;
+}
+.form-row .form-group {
+    width: 50%;
+}
 
 .contact-form input,
 .contact-form textarea {
@@ -946,7 +1094,7 @@ section { padding: 6rem 0; }
 .form-group.valid input, .form-group.valid textarea { border-color: #2ecc71; }
 .error-message { color: #e74c3c; font-size: 0.8rem; padding-left: 1rem; padding-top: 0.25rem; display: block; height: 1rem; }
 .contact-form button {
-    align-self: flex-start;
+    align-self: center;
     background: var(--accent-gradient);
     color: #ffffff;
     padding: 0.8rem 3rem;
@@ -965,6 +1113,8 @@ section { padding: 6rem 0; }
     animation: animateGradient 3s linear infinite;
 }
 .contact-form button:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.data-stream { display: none; } /* Hidden by default */
 
 /* --- Footer --- */
 .footer {
@@ -1146,7 +1296,26 @@ section { padding: 6rem 0; }
 
 
 /* --- AI Assistant --- */
-.ai-chat-widget { position: fixed; bottom: 2rem; right: 2rem; z-index: 1100; }
+@keyframes fab-enter {
+    from {
+        opacity: 0;
+        transform: scale(0) translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+.ai-chat-widget { 
+    position: fixed; 
+    bottom: 2rem; 
+    right: 2rem; 
+    z-index: 1100;
+    opacity: 0;
+    animation: fab-enter 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) 2.5s forwards;
+}
+
 .chat-fab {
     width: 60px;
     height: 60px;
@@ -1160,12 +1329,31 @@ section { padding: 6rem 0; }
     justify-content: center;
     cursor: pointer;
     box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-    transition: transform 0.2s ease, background-position 1s ease, box-shadow 0.3s ease;
+    transition: transform 0.3s ease, background-position 1s ease, box-shadow 0.3s ease, opacity 0.3s ease;
     animation: animateGradient 3s linear infinite;
+    position: relative;
+    z-index: 2;
 }
+
+.chat-fab svg {
+    transition: transform 0.3s ease;
+}
+
 .chat-fab:hover { 
     transform: scale(1.1); 
 }
+
+.chat-fab:hover svg {
+    transform: rotate(15deg);
+}
+
+.ai-chat-widget.chat-open .chat-fab {
+    transform: scale(0);
+    opacity: 0;
+    pointer-events: none;
+}
+
+
 .chat-fab.proactive-glow {
     box-shadow: 0 0 25px var(--accent-color-start);
     animation: animateGradient 3s linear infinite, glow 1.5s infinite alternate;
@@ -1201,7 +1389,7 @@ section { padding: 6rem 0; }
 
 .chat-window {
     position: absolute;
-    bottom: calc(100% + 1rem);
+    bottom: 0;
     right: 0;
     width: 350px;
     max-height: 500px;
@@ -1214,13 +1402,19 @@ section { padding: 6rem 0; }
     flex-direction: column;
     overflow: hidden;
     transform-origin: bottom right;
-    transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s ease;
-}
-.chat-window[hidden] {
+    
     opacity: 0;
     visibility: hidden;
     transform: translateY(10px) scale(0.95);
+    transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s;
 }
+
+.ai-chat-widget.chat-open .chat-window {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0) scale(1);
+}
+
 
 .chat-header {
     display: flex;
@@ -1357,7 +1551,7 @@ section { padding: 6rem 0; }
         right: -100%;
         width: 70%;
         max-width: 300px;
-        height: 100vh;
+        height: 100svh; /* Use svh for better mobile compatibility */
         background: var(--surface-color);
         backdrop-filter: blur(15px);
         flex-direction: column;
@@ -1376,12 +1570,16 @@ section { padding: 6rem 0; }
     .hero h1 { font-size: 2rem; }
     .hero p { font-size: 1rem; }
 
-    .contact-container { grid-template-columns: 1fr; gap: 2rem; }
-    .contact-info { text-align: center; }
-    .contact-info h2 { text-align: center; }
-    .contact-form button { align-self: center; }
-    .form-row { flex-direction: column; gap: 1.5rem; }
-    .form-row .form-group { width: 100%; }
+    .contact-container-inner {
+        padding: 2rem 1.5rem;
+    }
+    .form-row {
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+    .form-row .form-group {
+        width: 100%;
+    }
 
     .slider-btn.prev { left: 0.5rem; }
     .slider-btn.next { right: 0.5rem; }
