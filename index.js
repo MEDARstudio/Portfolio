@@ -939,8 +939,23 @@ function setupAIAssistant() {
 
     let textChat;
 
+    function addMessage(text, sender) {
+        const messageEl = document.createElement('div');
+        messageEl.classList.add('message', `${sender}-message`);
+        messageEl.textContent = text;
+        messagesContainer.appendChild(messageEl);
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        return messageEl;
+    }
+
     try {
-        const ai = new GoogleGenAI({apiKey: process.env.API_KEY});
+        // Safely access API_KEY for browser environments
+        const apiKey = (typeof process !== 'undefined' && process.env) ? process.env.API_KEY : undefined;
+        if (!apiKey) {
+            throw new Error("API Key not found.");
+        }
+
+        const ai = new GoogleGenAI({apiKey: apiKey});
         textChat = ai.chats.create({
             model: 'gemini-2.5-flash',
             config: {
@@ -948,8 +963,8 @@ function setupAIAssistant() {
             },
         });
     } catch (error) {
-        console.error("Failed to initialize Gemini AI:", error);
-        addMessage("Sorry, the AI assistant is currently unavailable.", 'ai');
+        console.error("Failed to initialize Gemini AI:", error.message);
+        // The AI will be gracefully handled as unavailable in the UI
     }
 
     const toggleChat = () => {
@@ -960,15 +975,19 @@ function setupAIAssistant() {
         if (!isOpen) { // If opening
             input.focus();
             if (messagesContainer.children.length === 0) {
-                 let greeting = "Hello! How can I help you learn more about MEDAR STUDIO today?";
-                 if (currentSection === 'work' || currentSection === 'full-portfolio') {
-                    greeting = "Hello! I see you're looking at our projects. Is there a specific type of work you're interested in?";
-                 } else if (currentSection === 'about') {
-                    greeting = "Hi there! Exploring our story? Let me know if you have any questions about our studio's philosophy.";
-                 } else if (currentSection === 'contact') {
-                    greeting = "Ready to connect? I can help answer any final questions you have before you get in touch.";
+                 if (textChat) {
+                     let greeting = "Hello! How can I help you learn more about MEDAR STUDIO today?";
+                     if (currentSection === 'work' || currentSection === 'full-portfolio') {
+                        greeting = "Hello! I see you're looking at our projects. Is there a specific type of work you're interested in?";
+                     } else if (currentSection === 'about') {
+                        greeting = "Hi there! Exploring our story? Let me know if you have any questions about our studio's philosophy.";
+                     } else if (currentSection === 'contact') {
+                        greeting = "Ready to connect? I can help answer any final questions you have before you get in touch.";
+                     }
+                     addMessage(greeting, 'ai');
+                 } else {
+                     addMessage("Sorry, the AI assistant is currently unavailable.", 'ai');
                  }
-                 addMessage(greeting, 'ai');
             }
         }
     };
@@ -976,15 +995,6 @@ function setupAIAssistant() {
     fab.addEventListener('click', toggleChat);
     closeBtn.addEventListener('click', toggleChat);
 
-    function addMessage(text, sender) {
-        const messageEl = document.createElement('div');
-        messageEl.classList.add('message', `${sender}-message`);
-        messageEl.textContent = text;
-        messagesContainer.appendChild(messageEl);
-        messagesContainer.scrollTop = messagesContainer.scrollHeight;
-        return messageEl;
-    }
-    
     async function handleUserMessage(messageText) {
         addMessage(messageText, 'user');
         const thinkingEl = addMessage('...', 'ai');
