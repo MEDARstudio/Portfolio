@@ -132,7 +132,7 @@ const portfolioItems = [
         process: [
             { image: 'https://images.unsplash.com/photo-1611652032997-54a23b2c2a71?q=80&w=1374&auto=format&fit=crop', text: 'The final render, showcasing the polished silver and the ruby eye. The focus was on creating a realistic material representation in Keyshot.' },
             { image: 'https://images.unsplash.com/photo-1599643477877-530eb83abc8e?q=80&w=1287&auto=format&fit=crop', text: 'A different angle highlighting the intricate scale details, which were sculpted in ZBrush to give the model a high level of realism.' },
-            { image: 'https://images.unsplash.com/photo-1605100804763-247f67b3557e?q=80&w=1470&auto=format&fit=crop', text: 'An early wireframe view from the modeling phase, showing the topology of the serpent\'s head and the clean geometry required for a smooth final product.' }
+            { image: 'https://images.unsplash.com/photo-1605100804763-247f6storyb3557e?q=80&w=1470&auto=format&fit=crop', text: 'An early wireframe view from the modeling phase, showing the topology of the serpent\'s head and the clean geometry required for a smooth final product.' }
         ]
     }
 ];
@@ -293,31 +293,33 @@ function renderApp() {
             
             <section id="contact" class="contact">
                 <div class="container contact-container">
-                    <div class="contact-info">
-                         <h2>Get In Touch</h2>
-                         <p>Have a project in mind or just want to say hello? We'd love to hear from you. Fill out the form, and we'll get back to you as soon as possible.</p>
+                    <div class="contact-container-inner">
+                        <div class="contact-info">
+                            <h2>Get In Touch</h2>
+                            <p>Have a project in mind or just want to say hello? We'd love to hear from you. Fill out the form below and we'll get back to you as soon as possible.</p>
+                        </div>
+                        <form action="https://formspree.io/f/meokznrv" method="POST" class="contact-form" novalidate>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <input type="text" id="name" name="name" placeholder="Your Name" required>
+                                    <span class="error-message"></span>
+                                </div>
+                                <div class="form-group">
+                                    <input type="email" id="email" name="email" placeholder="Your Email" required>
+                                    <span class="error-message"></span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <input type="tel" id="phone" name="phone" placeholder="WhatsApp Number (e.g., +1234567890)">
+                                <span class="error-message"></span>
+                            </div>
+                            <div class="form-group">
+                                <textarea name="message" id="message" placeholder="Your Message" rows="5" required></textarea>
+                                <span class="error-message"></span>
+                            </div>
+                            <button type="submit" disabled>Send Message</button>
+                        </form>
                     </div>
-                    <form action="https://formspree.io/f/meokznrv" method="POST" class="contact-form" novalidate>
-                        <div class="form-row">
-                             <div class="form-group">
-                                <input type="text" id="name" name="name" placeholder="Your Name" required>
-                                <span class="error-message"></span>
-                            </div>
-                             <div class="form-group">
-                                <input type="email" id="email" name="email" placeholder="Your Email" required>
-                                <span class="error-message"></span>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                           <input type="tel" id="phone" name="phone" placeholder="WhatsApp Number (e.g., +1234567890)">
-                           <span class="error-message"></span>
-                        </div>
-                        <div class="form-group">
-                            <textarea name="message" id="message" placeholder="Your Message" rows="5" required></textarea>
-                            <span class="error-message"></span>
-                        </div>
-                        <button type="submit" disabled>Send Message</button>
-                    </form>
                 </div>
             </section>
         </main>
@@ -350,10 +352,10 @@ function renderApp() {
 
     aiContainer.innerHTML = `
         <div class="ai-chat-widget">
-            <button class="chat-fab" aria-label="Open AI Assistant">
+            <button class="chat-fab" aria-label="Open AI Assistant" aria-expanded="false">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8V4H8" /><path d="M8.5 12.5a5 5 0 1 0 -5 0V12a3 3 0 0 0 3 3h1" /><path d="M18 18.5a5 5 0 1 0 0 -10v1.5" /><path d="M12.5 18H14a3 3 0 0 0 3 -3v-.5" /><path d="M16 12h-4" /></svg>
             </button>
-            <div class="chat-window" role="dialog" aria-modal="true" aria-labelledby="chat-heading" hidden>
+            <div class="chat-window" role="dialog" aria-modal="true" aria-labelledby="chat-heading">
                 <div class="chat-header">
                     <h3 id="chat-heading">AI Assistant</h3>
                     <button class="chat-close" aria-label="Close chat">&times;</button>
@@ -479,175 +481,187 @@ function setup3DCarousel() {
     const carousel3d = document.getElementById('carousel3d');
     const prevBtn = document.getElementById('prevBtn');
     const nextBtn = document.getElementById('nextBtn');
+    const carouselContainer = document.querySelector('.carousel-3d-container');
 
-    if (carousel3d && prevBtn && nextBtn) {
-        const items = portfolioItems.slice(0, 6); // Use only the first 6 items for the carousel
-        const cardCount = items.length;
-        const theta = 360 / cardCount;
-        let currentAngle = 0;
-        let autoRotateID = null;
-        let restartTimeout = null;
-        let isAutoRotating = true;
-        const autoRotateSpeed = 0.08;
+    if (!carousel3d || !prevBtn || !nextBtn || !carouselContainer) return;
 
-        const createCards = () => {
-            carousel3d.innerHTML = '';
-            items.forEach((item, i) => {
-                const card = document.createElement('div');
-                card.className = 'card';
-                card.style.transform = `rotateY(${i * theta}deg) translateZ(300px)`;
-                if (i === 0) card.classList.add('active');
-                card.dataset.id = item.id; // Use ID for project viewer
-                
-                const img = document.createElement('img');
-                img.src = item.coverImage;
-                img.alt = item.title;
-                card.appendChild(img);
-                
-                const overlay = document.createElement('div');
-                overlay.className = 'card-overlay';
-                overlay.innerHTML = `<h3>${item.title}</h3><p>${item.category}</p>`;
-                card.appendChild(overlay);
+    const items = portfolioItems.slice(0, 6);
+    const cardCount = items.length;
+    if (cardCount === 0) return;
 
-                carousel3d.appendChild(card);
-            });
-        };
+    const theta = 360 / cardCount;
+    let currentAngle = 0;
+    let autoRotateID = null;
+    let restartTimeout = null;
+    let isAutoRotating = true;
+    const autoRotateSpeed = 0.08;
 
-        const updateActiveCard = () => {
-            const cards = carousel3d.querySelectorAll('.card');
-            const normalizedAngle = ((currentAngle % 360) + 360) % 360;
-            const index = Math.round(normalizedAngle / theta) % cardCount;
-            cards.forEach((card, i) => {
-                card.classList.toggle('active', i === (cardCount - index) % cardCount);
-            });
-        };
-        
-        const rotateCarousel = (angle) => {
-            currentAngle += angle;
-            carousel3d.style.transform = `translateZ(-300px) rotateY(${currentAngle}deg)`;
-            updateActiveCard();
-        };
+    // Drag state variables
+    let isDragging = false;
+    let dragStartX = 0;
+    let dragStartY = 0; // For touch gesture detection
+    let startAngle = 0;
+    const dragSensitivity = 0.6; // Adjust for "feel"
 
-        const autoRotate = () => {
-            if (!isAutoRotating) return;
-            rotateCarousel(autoRotateSpeed);
-            autoRotateID = requestAnimationFrame(autoRotate);
-        };
-        
-        const startAutoRotate = () => {
-            if (isAutoRotating) return;
-            isAutoRotating = true;
-            autoRotate();
-        };
-        
-        const stopAutoRotate = () => {
-            if (restartTimeout) clearTimeout(restartTimeout);
-            if (!isAutoRotating) return;
-            isAutoRotating = false;
-            if (autoRotateID) {
-                cancelAnimationFrame(autoRotateID);
-                autoRotateID = null;
+    const createCards = () => {
+        carousel3d.innerHTML = '';
+        items.forEach((item, i) => {
+            const card = document.createElement('div');
+            card.className = 'card';
+            card.style.transform = `rotateY(${i * theta}deg) translateZ(300px)`;
+            if (i === 0) card.classList.add('active');
+            card.dataset.id = item.id;
+            
+            const img = document.createElement('img');
+            img.src = item.coverImage;
+            img.alt = item.title;
+            card.appendChild(img);
+            
+            const overlay = document.createElement('div');
+            overlay.className = 'card-overlay';
+            overlay.innerHTML = `<h3>${item.title}</h3><p>${item.category}</p>`;
+            card.appendChild(overlay);
+
+            carousel3d.appendChild(card);
+        });
+    };
+
+    const updateActiveCard = () => {
+        const cards = carousel3d.querySelectorAll('.card');
+        const normalizedAngle = ((currentAngle % 360) + 360) % 360;
+        const index = Math.round(normalizedAngle / theta) % cardCount;
+        cards.forEach((card, i) => {
+            card.classList.toggle('active', i === (cardCount - index) % cardCount);
+        });
+    };
+    
+    const rotateCarouselTo = (angle) => {
+        currentAngle = angle;
+        carousel3d.style.transform = `translateZ(-300px) rotateY(${currentAngle}deg)`;
+    };
+
+    const autoRotate = () => {
+        if (!isAutoRotating) return;
+        currentAngle += autoRotateSpeed;
+        carousel3d.style.transition = 'none';
+        rotateCarouselTo(currentAngle);
+        updateActiveCard(); // Update active card smoothly during auto-rotate
+        autoRotateID = requestAnimationFrame(autoRotate);
+    };
+    
+    const startAutoRotate = () => {
+        if (isAutoRotating) return;
+        isAutoRotating = true;
+        autoRotate();
+    };
+    
+    const stopAutoRotate = () => {
+        if (restartTimeout) clearTimeout(restartTimeout);
+        if (!isAutoRotating) return;
+        isAutoRotating = false;
+        if (autoRotateID) {
+            cancelAnimationFrame(autoRotateID);
+            autoRotateID = null;
+        }
+    };
+    
+    const snapToAngle = (angle, withAnimation = true) => {
+        carousel3d.style.transition = withAnimation 
+            ? 'transform 0.5s cubic-bezier(0.25, 0.8, 0.25, 1)'
+            : 'none';
+        rotateCarouselTo(angle);
+        updateActiveCard();
+    };
+
+    const restartRotationAfterDelay = () => {
+        clearTimeout(restartTimeout);
+        restartTimeout = setTimeout(startAutoRotate, 5000);
+    };
+
+    prevBtn.addEventListener('click', () => {
+        stopAutoRotate();
+        const cardIndex = Math.round(currentAngle / theta);
+        snapToAngle((cardIndex - 1) * theta);
+        restartRotationAfterDelay();
+    });
+
+    nextBtn.addEventListener('click', () => {
+        stopAutoRotate();
+        const cardIndex = Math.round(currentAngle / theta);
+        snapToAngle((cardIndex + 1) * theta);
+        restartRotationAfterDelay();
+    });
+    
+    // --- Drag Handlers ---
+    const handleDragStart = (clientX) => {
+        isDragging = true;
+        dragStartX = clientX;
+        startAngle = currentAngle;
+        stopAutoRotate();
+        carousel3d.style.transition = 'none';
+        carouselContainer.style.cursor = 'grabbing';
+    };
+
+    const handleDragMove = (clientX) => {
+        if (!isDragging) return;
+        const diffX = clientX - dragStartX;
+        // Dragging right (positive diffX) should spin the carousel to show items from the left.
+        // This corresponds to a negative rotation (e.g., rotateY(-30deg)).
+        const angleChange = diffX * dragSensitivity;
+        rotateCarouselTo(startAngle - angleChange);
+    };
+
+    const handleDragEnd = () => {
+        if (!isDragging) return;
+        isDragging = false;
+        carouselContainer.style.cursor = 'grab';
+        const cardIndex = Math.round(currentAngle / theta);
+        snapToAngle(cardIndex * theta);
+        restartRotationAfterDelay();
+    };
+
+    // --- Event Listeners ---
+    carouselContainer.addEventListener('mousedown', (e) => {
+        e.preventDefault();
+        handleDragStart(e.clientX);
+    });
+    window.addEventListener('mousemove', (e) => {
+        if(isDragging) handleDragMove(e.clientX);
+    });
+    window.addEventListener('mouseup', handleDragEnd);
+    window.addEventListener('mouseleave', handleDragEnd);
+
+    carouselContainer.addEventListener('touchstart', (e) => {
+        dragStartX = e.touches[0].clientX;
+        dragStartY = e.touches[0].clientY;
+        // Drag start is deferred to touchmove to detect swipe direction
+    }, { passive: true });
+
+    carouselContainer.addEventListener('touchmove', (e) => {
+        if (e.touches.length === 0) return;
+        const currentX = e.touches[0].clientX;
+        const currentY = e.touches[0].clientY;
+
+        if (!isDragging) {
+            // Only start dragging if the swipe is predominantly horizontal
+            if (Math.abs(currentX - dragStartX) > Math.abs(currentY - dragStartY) + 5) {
+                handleDragStart(dragStartX);
+            } else {
+                // Vertical swipe, do nothing
+                return;
             }
-        };
-        
-        const restartRotationAfterDelay = () => {
-            restartTimeout = setTimeout(startAutoRotate, 5000);
-        };
-
-        prevBtn.addEventListener('click', () => {
-            stopAutoRotate();
-            rotateCarousel(theta);
-            restartRotationAfterDelay();
-        });
-        nextBtn.addEventListener('click', () => {
-            stopAutoRotate();
-            rotateCarousel(-theta);
-            restartRotationAfterDelay();
-        });
-        
-        const carouselContainer = carousel3d.parentElement;
-        if (carouselContainer) {
-            let startX = 0;
-            let startY = 0;
-            let isDragging = false;
-            
-            // --- Mouse Handlers ---
-            const handleMouseDown = (e) => {
-                isDragging = true;
-                startX = e.clientX;
-                stopAutoRotate();
-                carouselContainer.style.cursor = 'grabbing';
-            };
-
-            const handleMouseMove = (e) => {
-                if (!isDragging) return;
-                let diffX = e.clientX - startX;
-                if (Math.abs(diffX) > 10) { 
-                    rotateCarousel(diffX > 0 ? theta : -theta);
-                    startX = e.clientX;
-                }
-            };
-            
-            const handleMouseUp = () => {
-                if (isDragging) {
-                    isDragging = false;
-                    carouselContainer.style.cursor = 'grab';
-                    restartRotationAfterDelay();
-                }
-            };
-
-            carouselContainer.addEventListener('mousedown', handleMouseDown);
-            window.addEventListener('mousemove', handleMouseMove);
-            window.addEventListener('mouseup', handleMouseUp);
-            window.addEventListener('mouseleave', handleMouseUp);
-
-            // --- Touch Handlers (to prevent conflict with mobile browser gestures) ---
-            const handleTouchStart = (e) => {
-                isDragging = true;
-                startX = e.touches[0].clientX;
-                startY = e.touches[0].clientY;
-                stopAutoRotate();
-            };
-
-            const handleTouchMove = (e) => {
-                if (!isDragging) return;
-
-                const currentX = e.touches[0].clientX;
-                const currentY = e.touches[0].clientY;
-                const diffX = currentX - startX;
-                const diffY = currentY - startY;
-
-                // Only handle the swipe if it's primarily horizontal
-                if (Math.abs(diffX) > Math.abs(diffY)) {
-                    e.preventDefault(); // Prevent browser navigation/scrolling
-                    
-                    if (Math.abs(diffX) > 20) {
-                        rotateCarousel(diffX > 0 ? theta : -theta);
-                        // Update start positions for the next move segment
-                        startX = currentX;
-                        startY = currentY;
-                    }
-                } else {
-                    // It's a vertical swipe, so let the user scroll and stop our drag logic
-                    isDragging = false;
-                }
-            };
-            
-            const handleTouchEnd = () => {
-                if (isDragging) {
-                    isDragging = false;
-                    restartRotationAfterDelay();
-                }
-            };
-
-            carouselContainer.addEventListener('touchstart', handleTouchStart, { passive: true });
-            carouselContainer.addEventListener('touchmove', handleTouchMove, { passive: false });
-            carouselContainer.addEventListener('touchend', handleTouchEnd);
         }
 
-        createCards();
-        autoRotate();
-    }
+        // If dragging has started, prevent vertical scroll and handle move
+        e.preventDefault();
+        handleDragMove(currentX);
+
+    }, { passive: false }); // passive:false is required to call preventDefault
+
+    carouselContainer.addEventListener('touchend', handleDragEnd);
+
+    createCards();
+    autoRotate();
 }
 
 /**
@@ -910,13 +924,16 @@ function setupContactForm() {
  * Sets up the AI assistant functionality.
  */
 function setupAIAssistant() {
-    const fab = document.querySelector('.chat-fab');
-    const chatWindow = document.querySelector('.chat-window');
-    const closeBtn = document.querySelector('.chat-close');
-    const chatForm = document.querySelector('.chat-form');
+    const widget = document.querySelector('.ai-chat-widget');
+    if (!widget) return;
+    
+    const fab = widget.querySelector('.chat-fab');
+    const chatWindow = widget.querySelector('.chat-window');
+    const closeBtn = widget.querySelector('.chat-close');
+    const chatForm = widget.querySelector('.chat-form');
     const input = chatForm.querySelector('input');
-    const messagesContainer = document.querySelector('.chat-messages');
-    const quickQuestionBtns = document.querySelectorAll('.quick-question-btn');
+    const messagesContainer = widget.querySelector('.chat-messages');
+    const quickQuestionBtns = widget.querySelectorAll('.quick-question-btn');
 
     if (!fab || !chatWindow || !closeBtn || !chatForm || !input || !messagesContainer) return;
 
@@ -936,10 +953,11 @@ function setupAIAssistant() {
     }
 
     const toggleChat = () => {
-        const isHidden = chatWindow.hidden;
-        chatWindow.hidden = !isHidden;
-        fab.setAttribute('aria-expanded', isHidden.toString());
-        if (isHidden) {
+        const isOpen = widget.classList.contains('chat-open');
+        widget.classList.toggle('chat-open');
+        fab.setAttribute('aria-expanded', !isOpen);
+
+        if (!isOpen) { // If opening
             input.focus();
             if (messagesContainer.children.length === 0) {
                  let greeting = "Hello! How can I help you learn more about MEDAR STUDIO today?";
@@ -1041,9 +1059,9 @@ function setupSectionObserver() {
  */
 function setupInactivityTimer() {
     function showProactiveMessage() {
-        const chatWindow = document.querySelector('.chat-window');
-        if (chatWindow && chatWindow.hidden) {
-            const fab = document.querySelector('.chat-fab');
+        const widget = document.querySelector('.ai-chat-widget');
+        if (widget && !widget.classList.contains('chat-open')) {
+            const fab = widget.querySelector('.chat-fab');
             fab.classList.add('proactive-glow');
             
             let proactiveBubble = document.querySelector('.proactive-bubble');
@@ -1084,7 +1102,71 @@ function setupInactivityTimer() {
 }
 
 
+/**
+ * Handles the "Digital Genesis" preloader with a simple fade transition.
+ */
+async function setupPreloader() {
+    const preloader = document.getElementById('preloader');
+    const particleContainer = document.getElementById('particle-container');
+    const logoContainer = document.querySelector('.genesis-logo');
+    const root = document.getElementById('root');
+
+    if (!preloader || !root || !particleContainer || !logoContainer) {
+        root?.classList.add('visible');
+        preloader?.remove();
+        return;
+    }
+
+    const logoText = "MEDAR STUDIO";
+    const MINIMUM_ANIMATION_TIME = 2800;
+    const FADE_DURATION = 500;
+
+    const createVisuals = () => {
+        // Create particles
+        const particleFragment = document.createDocumentFragment();
+        for (let i = 0; i < 50; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.classList.add(Math.random() > 0.5 ? 'cyan' : 'purple');
+            const size = Math.random() * 5 + 2;
+            particle.style.width = `${size}px`;
+            particle.style.height = `${size}px`;
+            particle.style.top = `${Math.random() * 100}%`;
+            particle.style.left = `${Math.random() * 100}%`;
+            particle.style.animationDelay = `${Math.random() * 0.5}s`;
+            particleFragment.appendChild(particle);
+        }
+        particleContainer.appendChild(particleFragment);
+
+        // Create logo
+        logoContainer.innerHTML = logoText.split('').map((char, index) => {
+            const delay = 0.5 + index * 0.05;
+            return `<span style="animation-delay: ${delay}s;">${char}</span>`;
+        }).join('');
+    };
+    
+    createVisuals();
+
+    const loadPromise = new Promise(resolve => {
+        window.addEventListener('load', resolve, { once: true });
+    });
+    const animationPromise = new Promise(resolve => setTimeout(resolve, MINIMUM_ANIMATION_TIME));
+
+    await Promise.all([loadPromise, animationPromise]);
+    
+    // Start the fade out transition for the preloader and fade in for the site
+    preloader.classList.add('is-hiding');
+    root.classList.add('visible');
+
+    // Remove preloader from DOM after transition is complete
+    setTimeout(() => {
+        preloader.remove();
+    }, FADE_DURATION);
+}
+
+
 // Initial render of the application when the DOM is ready.
 document.addEventListener('DOMContentLoaded', () => {
+    setupPreloader();
     renderApp();
 });
