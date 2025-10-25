@@ -1,7 +1,3 @@
-
-
-import { GoogleGenAI } from "@google/genai";
-
 // --- Data for the portfolio ---
 
 const portfolioItems = [
@@ -151,16 +147,6 @@ const socialLinks = [
     { name: 'LinkedIn', url: 'https://www.linkedin.com/in/mohamed-amine-amarir-4b4682256', icon: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4m0 2a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2z" /><path d="M8 11l0 5" /><path d="M8 8l0 .01" /><path d="M12 16l0 -5" /><path d="M16 16v-3a2 2 0 0 0 -4 0" /></svg>' }
 ];
 
-const quickQuestions = [
-    { question: "What services do you offer?", answer: "MEDAR STUDIO offers a range of creative services including UI/UX Design, Branding, Web Development, Illustration, and Motion Graphics. Do you have a specific project in mind?" },
-    { question: "Tell me more about your studio.", answer: "MEDAR STUDIO is a creative space where our team of passionate designers and visual artists collaborate to craft unique and impactful digital experiences. You can learn more in the 'About Us' section!" },
-    { question: "How can we start a project?", answer: "It's simple! Just head over to the 'Contact' section, fill out the form with some details about your project, and we'll get back to you as soon as possible to discuss the next steps." },
-];
-
-// --- Application State ---
-let currentSection = 'home';
-let inactivityTimer;
-
 // --- Core Application Logic ---
 
 /**
@@ -168,8 +154,7 @@ let inactivityTimer;
  */
 function renderApp() {
     const appContainer = document.getElementById('root');
-    const aiContainer = document.getElementById('ai-assistant-container');
-    if (!appContainer || !aiContainer) return;
+    if (!appContainer) return;
 
     const categories = ['All', ...new Set(portfolioItems.map(item => item.category))];
     const logoText = "MEDAR STUDIO";
@@ -350,34 +335,6 @@ function renderApp() {
         </div>
     `;
 
-    aiContainer.innerHTML = `
-        <div class="ai-chat-widget">
-            <button class="chat-fab" aria-label="Open AI Assistant" aria-expanded="false">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8V4H8" /><path d="M8.5 12.5a5 5 0 1 0 -5 0V12a3 3 0 0 0 3 3h1" /><path d="M18 18.5a5 5 0 1 0 0 -10v1.5" /><path d="M12.5 18H14a3 3 0 0 0 3 -3v-.5" /><path d="M16 12h-4" /></svg>
-            </button>
-            <div class="chat-window" role="dialog" aria-modal="true" aria-labelledby="chat-heading">
-                <div class="chat-header">
-                    <h3 id="chat-heading">AI Assistant</h3>
-                    <button class="chat-close" aria-label="Close chat">&times;</button>
-                </div>
-                <div class="chat-body">
-                    <div class="chat-messages"></div>
-                </div>
-                <div class="chat-footer">
-                    <div class="quick-questions">
-                         ${quickQuestions.map(q => `<button class="quick-question-btn">${q.question}</button>`).join('')}
-                    </div>
-                    <form class="chat-form">
-                        <input type="text" placeholder="Ask me anything..." required />
-                        <button type="submit" aria-label="Send message">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 14l11 -11" /><path d="M21 3l-6.5 18a.55 .55 0 0 1 -1 0l-3.5 -7l-7 -3.5a.55 .55 0 0 1 0 -1l18 -6.5" /></svg>
-                        </button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    `;
-
     setupHeaderScrollEffect();
     setupSmoothScrolling();
     setupScrollAnimations();
@@ -387,11 +344,8 @@ function renderApp() {
     setupMobileNav();
     setupTestimonialsSlider();
     setupAboutToggle();
-    setupAIAssistant();
     setupContactForm();
     setupInteractiveBackground();
-    setupSectionObserver();
-    setupInactivityTimer();
 }
 
 /**
@@ -919,125 +873,6 @@ function setupContactForm() {
     });
 }
 
-
-/**
- * Sets up the AI assistant functionality.
- */
-function setupAIAssistant() {
-    const widget = document.querySelector('.ai-chat-widget');
-    if (!widget) return;
-    
-    const fab = widget.querySelector('.chat-fab');
-    const chatWindow = widget.querySelector('.chat-window');
-    const closeBtn = widget.querySelector('.chat-close');
-    const chatForm = widget.querySelector('.chat-form');
-    const input = chatForm.querySelector('input');
-    const messagesContainer = widget.querySelector('.chat-messages');
-    const quickQuestionBtns = widget.querySelectorAll('.quick-question-btn');
-
-    if (!fab || !chatWindow || !closeBtn || !chatForm || !input || !messagesContainer) return;
-
-    let textChat;
-
-    function addMessage(text, sender) {
-        const messageEl = document.createElement('div');
-        messageEl.classList.add('message', `${sender}-message`);
-        messageEl.textContent = text;
-        messagesContainer.appendChild(messageEl);
-        messagesContainer.scrollTop = messagesContainer.scrollHeight;
-        return messageEl;
-    }
-
-    try {
-        // Safely access API_KEY for browser environments
-        const apiKey = (typeof process !== 'undefined' && process.env) ? process.env.API_KEY : undefined;
-        if (!apiKey) {
-            throw new Error("API Key not found.");
-        }
-
-        const ai = new GoogleGenAI({apiKey: apiKey});
-        textChat = ai.chats.create({
-            model: 'gemini-2.5-flash',
-            config: {
-                systemInstruction: "You are a friendly and professional AI assistant for MEDAR STUDIO, a creative design agency. Your goal is to answer questions about the studio and its services. Our team's skills include UI/UX Design, Branding, Web Development, Illustration, and Motion Graphics. Encourage users to use the contact form for project inquiries.",
-            },
-        });
-    } catch (error) {
-        console.error("Failed to initialize Gemini AI:", error.message);
-        // The AI will be gracefully handled as unavailable in the UI
-    }
-
-    const toggleChat = () => {
-        const isOpen = widget.classList.contains('chat-open');
-        widget.classList.toggle('chat-open');
-        fab.setAttribute('aria-expanded', !isOpen);
-
-        if (!isOpen) { // If opening
-            input.focus();
-            if (messagesContainer.children.length === 0) {
-                 if (textChat) {
-                     let greeting = "Hello! How can I help you learn more about MEDAR STUDIO today?";
-                     if (currentSection === 'work' || currentSection === 'full-portfolio') {
-                        greeting = "Hello! I see you're looking at our projects. Is there a specific type of work you're interested in?";
-                     } else if (currentSection === 'about') {
-                        greeting = "Hi there! Exploring our story? Let me know if you have any questions about our studio's philosophy.";
-                     } else if (currentSection === 'contact') {
-                        greeting = "Ready to connect? I can help answer any final questions you have before you get in touch.";
-                     }
-                     addMessage(greeting, 'ai');
-                 } else {
-                     addMessage("Sorry, the AI assistant is currently unavailable.", 'ai');
-                 }
-            }
-        }
-    };
-
-    fab.addEventListener('click', toggleChat);
-    closeBtn.addEventListener('click', toggleChat);
-
-    async function handleUserMessage(messageText) {
-        addMessage(messageText, 'user');
-        const thinkingEl = addMessage('...', 'ai');
-        thinkingEl.classList.add('thinking');
-
-        if (!textChat) {
-            thinkingEl.textContent = "We can't connect to the AI service right now.";
-            thinkingEl.classList.remove('thinking');
-            return;
-        }
-
-        try {
-            const response = await textChat.sendMessage({ message: messageText });
-            thinkingEl.textContent = response.text;
-            thinkingEl.classList.remove('thinking');
-        } catch (error) {
-            console.error("Gemini API Error:", error);
-            thinkingEl.textContent = "Oops! Something went wrong while getting a response.";
-            thinkingEl.classList.remove('thinking');
-        }
-    }
-    
-    chatForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const messageText = input.value.trim();
-        if (messageText) {
-            handleUserMessage(messageText);
-            input.value = '';
-        }
-    });
-
-    quickQuestionBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
-            const question = btn.textContent;
-            const predefined = quickQuestions.find(q => q.question === question);
-            addMessage(question, 'user');
-            if (predefined) {
-                addMessage(predefined.answer, 'ai');
-            }
-        });
-    });
-}
-
 /**
  * Sets up a dynamic background that reacts to mouse movement.
  */
@@ -1047,70 +882,6 @@ function setupInteractiveBackground() {
         document.documentElement.style.setProperty('--mouse-y', `${e.clientY}px`);
     });
 }
-
-/**
- * Observes page sections to provide context to the AI.
- */
-function setupSectionObserver() {
-    const sections = document.querySelectorAll('section[id]');
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting && entry.intersectionRatio >= 0.5) {
-                currentSection = entry.target.id;
-            }
-        });
-    }, { threshold: 0.5 });
-
-    sections.forEach(section => observer.observe(section));
-}
-
-/**
- * Sets up a timer to proactively engage the user after a period of inactivity.
- */
-function setupInactivityTimer() {
-    function showProactiveMessage() {
-        const widget = document.querySelector('.ai-chat-widget');
-        if (widget && !widget.classList.contains('chat-open')) {
-            const fab = widget.querySelector('.chat-fab');
-            fab.classList.add('proactive-glow');
-            
-            let proactiveBubble = document.querySelector('.proactive-bubble');
-            if (!proactiveBubble) {
-                proactiveBubble = document.createElement('div');
-                proactiveBubble.className = 'proactive-bubble';
-                fab.parentElement.appendChild(proactiveBubble);
-            }
-            
-            let message = "Have any questions?";
-            if (currentSection === 'work' || currentSection === 'full-portfolio') {
-                message = "Interested in our projects? Ask me anything!";
-            } else if (currentSection === 'about') {
-                message = "Curious about our studio?";
-            }
-            proactiveBubble.textContent = message;
-            proactiveBubble.classList.add('visible');
-
-            setTimeout(() => proactiveBubble.classList.remove('visible'), 8000);
-        }
-    }
-
-    function resetInactivityTimer() {
-        const fab = document.querySelector('.chat-fab');
-        const bubble = document.querySelector('.proactive-bubble');
-        fab?.classList.remove('proactive-glow');
-        bubble?.classList.remove('visible');
-
-        clearTimeout(inactivityTimer);
-        inactivityTimer = setTimeout(showProactiveMessage, 30000);
-    }
-
-    window.addEventListener('mousemove', resetInactivityTimer, { passive: true });
-    window.addEventListener('keydown', resetInactivityTimer, { passive: true });
-    window.addEventListener('scroll', resetInactivityTimer, { passive: true });
-    window.addEventListener('click', resetInactivityTimer, { passive: true });
-    resetInactivityTimer();
-}
-
 
 /**
  * Handles the "Digital Genesis" preloader with a simple fade transition.
